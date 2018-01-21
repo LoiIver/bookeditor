@@ -13,7 +13,7 @@ namespace BookEditor.Windsor
 
 		public HttpControllerActivator(IWindsorContainer container)
 		{
-			this._container = container;
+			_container = container;
 		}
 
 		public IHttpController Create(
@@ -22,7 +22,7 @@ namespace BookEditor.Windsor
 		  Type controllerType)
 		{
 			var controller =
-			  (IHttpController)this._container.Resolve(controllerType);
+			  (IHttpController)_container.Resolve(controllerType);
 
 			request.RegisterForDispose(
 			  new Release(

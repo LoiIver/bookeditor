@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -33,11 +29,10 @@ namespace BookEditor
 			_container = new WindsorContainer()
 				.Install(FromAssembly.This());
 
-			//var controllerFactory = new WindsorControllerFactory(_container.Kernel);
+			var controllerFactory = new WindsorControllerFactory(_container.Kernel);
+			ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 			GlobalConfiguration.Configuration.Services.Replace(typeof(IHttpControllerActivator),
 				new HttpControllerActivator(_container));
-
-			//ControllerBuilder.Current.SetControllerFactory(controllerFactory);
 		}
 
 		protected void Application_End()
