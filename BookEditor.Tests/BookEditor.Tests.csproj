@@ -84,6 +84,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Utils\ISBNAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -93,7 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BookEditor\BookEditor.csproj">
-      <Project>{5FB2A740-E140-4F88-AF8D-A006C6856CA1}</Project>
+      <Project>{a8a25374-40db-459f-b76f-ecd531126aac}</Project>
       <Name>BookEditor</Name>
     </ProjectReference>
   </ItemGroup>

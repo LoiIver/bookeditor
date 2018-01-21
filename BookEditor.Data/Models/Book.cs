@@ -1,8 +1,8 @@
 ﻿namespace BookEditor.Data.Models
 {
-    public class Book
+	public class Book
 
-    {
+	{
 		/*
 		 - заголовок (обязательный параметр, не более 30 символов)
 - список авторов (книга должна содержать хотя бы одного автора)
@@ -17,14 +17,9 @@
 		public int BookId { get; set; }
 		public string Title { get; set; }
 		public int NumPages { get; set; }
-
 		public int PublisherId { get; set; }
-
-	    public int? PublishYear { get; set; }
-
-		
+		public int? PublishYear { get; set; }
 		public string ISBN { get; set; }
-
-	    public object Illustration { get; set; }
-    }
+		public object Illustration { get; set; }
+	}
 }
