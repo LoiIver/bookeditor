@@ -10,7 +10,7 @@ using BookEditorSPA.Models;
 
 namespace BookEditorSPA.Controllers
 {
-	[Authorize]
+ 
 	public class ManageController : Controller
 	{
 		private ApplicationSignInManager _signInManager;

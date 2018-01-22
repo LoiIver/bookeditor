@@ -20,14 +20,14 @@ namespace BookEditorSPA
 		{
 			PublicClientId = "web";
 
-			OAuthOptions = new OAuthAuthorizationServerOptions
-			{
-				TokenEndpointPath = new PathString("/Token"),
-				AuthorizeEndpointPath = new PathString("/Account/Authorize"),
-				Provider = new ApplicationOAuthProvider(PublicClientId),
-				AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
-				AllowInsecureHttp = true
-			};
+			//OAuthOptions = new OAuthAuthorizationServerOptions
+			//{
+			//	TokenEndpointPath = new PathString("/Token"),
+			//	AuthorizeEndpointPath = new PathString("/Account/Authorize"),
+			//	Provider = new ApplicationOAuthProvider(PublicClientId),
+			//	AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+			//	AllowInsecureHttp = true
+			//};
 		}
 
 		public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }

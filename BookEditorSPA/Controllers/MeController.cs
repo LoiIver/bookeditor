@@ -14,7 +14,7 @@ using BookEditorSPA.Models;
 
 namespace BookEditorSPA.Controllers
 {
-	[Authorize]
+ 
 	public class MeController : ApiController
 	{
 		private ApplicationUserManager _userManager;
