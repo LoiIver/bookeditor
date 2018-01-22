@@ -1,6 +1,8 @@
 ﻿https://docs.microsoft.com/en-us/aspnet/web-api/overview/getting-started-with-aspnet-web-api/build-a-single-page-application-spa-with-aspnet-web-api-and-angularjs
 https://github.com/castleproject/Windsor/blob/master/docs/mvc-tutorial-part-2-plugging-windsor-in.md
 
+http://www.c-sharpcorner.com/article/learn-basics-of-mvc-using-angularjs/
+
  [Authorize]
     public class HomeController : Controller
 
