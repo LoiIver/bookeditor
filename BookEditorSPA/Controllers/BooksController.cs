@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using BookEditor.Data.Models;
 using BookEditor.Data.Repositories;
 
 //using BookEditor.Models;
@@ -22,7 +23,7 @@ namespace BookEditorSPA.Controllers
 
 			//Att Task  await
 			var books = _bookRepository.GetBooks()?.ToList();
-			if (books == null || books.Any())
+			if (books == null || !books.Any())
 				return NotFound();
 			return Ok(books);
 		}
@@ -55,5 +56,13 @@ namespace BookEditorSPA.Controllers
 //	//		var isCorrect = await this.StoreAsync(answer);
 //			return this.Ok<bool>(true);
 //		}
+
+
+		public IHttpActionResult Put(Book book)
+		{
+			if (ModelState.IsValid)
+				;
+			return Ok("");
+		}
 	}
 }

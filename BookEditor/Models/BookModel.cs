@@ -22,7 +22,7 @@ namespace BookEditor.Models
 		public int BookId { get; set; }
 
 		[Required]
-		[MaxLength(35)]
+		[StringLength(35)] //Att
 		public string Title { get; set; }
 
 		[Required]
