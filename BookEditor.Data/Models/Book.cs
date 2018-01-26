@@ -1,4 +1,7 @@
-﻿namespace BookEditor.Data.Models
+﻿using System.Collections.Generic;
+using System.Security.Policy;
+
+namespace BookEditor.Data.Models
 {
 	public class Book
 
@@ -14,12 +17,14 @@
 - ISBN с валидацией (http://en.wikipedia.org/wiki/International_Standard_Book_Number)
 - изображение (опциональный параметр)
  */
-		public int BookId { get; set; }
+		public long BookId { get; set; }
 		public string Title { get; set; }
 		public int NumPages { get; set; }
-		public int PublisherId { get; set; }
+		public PubHouse PubHouse { get; set; }
 		public int? PublishYear { get; set; }
 		public string ISBN { get; set; }
 		public object Illustration { get; set; }
+
+		public List<Author> Authors { get; set; }
 	}
 }

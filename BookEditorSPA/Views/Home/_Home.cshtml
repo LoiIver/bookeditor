@@ -2,12 +2,24 @@
 <span data-bind="text:  books().length, visible: books().length > 0"></span>
 <table data-bind="visible: books().length > 0">
 	<thead>
-	<tr><th>Название</th><th>ISBN</th></tr>
+		<tr><th>Название</th>
+			<th>Авторы</th>
+			<th>Количество страниц</th>
+			<th>Название издательства</th>
+			<th>Год публикации</th>
+			<th>ISBN</th>
+			<th>Изображение</th>
+		</tr>
 	</thead>
 	<tbody data-bind="foreach: books">
 		<tr>
 			<td data-bind="text: title"></td>
+			<td data-bind="text: authors().length"></td>
+			<td data-bind="text: numPages"></td>
+			<td data-bind="text: publishName"></td>
+			<td data-bind="text: publishYear"></td>
 			<td data-bind="text: isbn"></td>
+			<td><img data-bind="attr: {src: imageUrl}"/></td>
 		</tr>
 	</tbody>
 </table>

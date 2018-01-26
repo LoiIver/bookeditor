@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using BookEditor.Data.Models;
-using BookEditor.Data.Repositories;
+using BookEditor.Data.Contracts;
 
 //using BookEditor.Models;
 
@@ -22,7 +22,7 @@ namespace BookEditorSPA.Controllers
 		{
 
 			//Att Task  await
-			var books = _bookRepository.GetBooks()?.ToList();
+			var books = _bookRepository.Get()?.ToList();
 			if (books == null || !books.Any())
 				return NotFound();
 			return Ok(books);
@@ -31,7 +31,7 @@ namespace BookEditorSPA.Controllers
 		public IHttpActionResult GetBook(int id)
 		{
 			var book =
-				_bookRepository.GetBook(id);
+				_bookRepository.Get(id);
 			//Att Task  await
 			if (book == null)
 				return NotFound();
