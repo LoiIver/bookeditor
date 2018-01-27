@@ -1,4 +1,5 @@
-﻿using BookEditor.Data.Repositories;
+﻿using BookEditor.Data.Contracts;
+using BookEditor.Data.Repositories;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
@@ -9,7 +10,11 @@ namespace BookEditorSPA.Windsor
 	{
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
-			container.Register(Component.For<IBookRepository>().ImplementedBy<BookRepository>() 				
+			container.Register(Component.For<IBookRepository>().ImplementedBy<BookRepository>()
+			.LifestyleSingleton());
+			container.Register(Component.For<IAuthorRepository>().ImplementedBy<AuthorRepository>()
+				.LifestyleSingleton());
+			container.Register(Component.For<IPubHouseRepository>().ImplementedBy<PubHouseRepository>()
 				.LifestyleSingleton());
 
 		}

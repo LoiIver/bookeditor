@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Security.Policy;
+
 
 namespace BookEditor.Data.Models
 {
-	public class Book
+	public  sealed class Book
 
 	{
 		/*
@@ -20,11 +20,9 @@ namespace BookEditor.Data.Models
 		public long BookId { get; set; }
 		public string Title { get; set; }
 		public int NumPages { get; set; }
-		public PubHouse PubHouse { get; set; }
+		public long PubHouseId { get; set; }
 		public int? PublishYear { get; set; }
 		public string ISBN { get; set; }
 		public object Illustration { get; set; }
-
-		public List<Author> Authors { get; set; }
 	}
 }

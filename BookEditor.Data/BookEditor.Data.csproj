@@ -44,9 +44,11 @@
     <Compile Include="Contracts\AuthorRepository.cs" />
     <Compile Include="Contracts\PubHouseRepository.cs" />
     <Compile Include="Contracts\IBookRepository.cs" />
+    <Compile Include="Models\BookAuthors.cs" />
     <Compile Include="Models\PubHouse.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Book.cs" />
+    <Compile Include="Repositories\DataContext.cs" />
     <Compile Include="Repositories\PubHouseRepository.cs" />
     <Compile Include="Repositories\AuthorRepository.cs" />
     <Compile Include="Repositories\BookRepository.cs" />

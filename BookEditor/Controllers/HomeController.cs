@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using BookEditor.Data.Contracts;
 using BookEditor.Data.Repositories;
 
 namespace BookEditor.Controllers

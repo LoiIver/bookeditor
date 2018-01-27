@@ -58,7 +58,7 @@ namespace BookEditorSPA.Controllers
 //		}
 
 
-		public IHttpActionResult Put(Book book)
+		public IHttpActionResult Post(Book book)
 		{
 			if (ModelState.IsValid)
 				;
