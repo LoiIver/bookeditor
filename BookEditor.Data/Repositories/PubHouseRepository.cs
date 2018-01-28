@@ -8,14 +8,7 @@ namespace BookEditor.Data.Repositories
 {
 	public class PubHouseRepository : IPubHouseRepository
 	{
-		private static readonly List<PubHouse> _pubHouses = new List<PubHouse>()
-		{
-			new PubHouse {PubHouseId = 1, Name = "Просвещение"},
-			new PubHouse {PubHouseId = 2, Name = "Педагогическая книга"},
-			new PubHouse {PubHouseId = 3, Name = "Клевер"},
-			new PubHouse {PubHouseId = 4, Name = "АСТ"},
-			new PubHouse {PubHouseId = 5, Name = "Азбука"}
-		};
+		private readonly List<PubHouse> _items  = new List<PubHouse>();
 
 		public void Delete(long id)
 		{
@@ -24,12 +17,20 @@ namespace BookEditor.Data.Repositories
 
 		public List<PubHouse> Get()
 		{
-			return _pubHouses;
+			return _items;
 		}
+
+		public void Add(PubHouse t)
+		{
+			long id = (_items.Any() ? _items.Max(a => a.PubHouseId) : 0) + 1;
+			t.PubHouseId = id;
+			_items.Add(t);
+		}
+
 
 		public PubHouse Get(long id)
 		{
-			return _pubHouses.Single(t => t.PubHouseId == id);
+			return _items.Single(t => t.PubHouseId == id);
 			;
 		}
  

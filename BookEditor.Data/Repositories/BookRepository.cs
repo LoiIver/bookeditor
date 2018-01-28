@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
 using BookEditor.Data.Models;
@@ -8,28 +7,40 @@ namespace BookEditor.Data.Repositories
 {
 	public class BookRepository : IBookRepository
 	{
-
-		internal static List<Book> Books;
+		private readonly List<Book> _items = new List<Book>();
 
 		public  List<Book> Get()
 		{
-			return Books;
+			return _items;
+		}
+
+		public void Add(Book t)
+		{
+			long id = (_items.Any() ? _items.Max(a => a.BookId) : 0) + 1;
+			t.BookId = id;
+			_items.Add(t);
 		}
 
 		public   Book Get(long id)
 		{
-			return Books.Single(t => t.BookId == id);
+			return _items.Single(t => t.BookId == id);
 		}
 
 		public void Update(Book t)
 		{
-			throw new NotImplementedException();
+			var book = Get(t.BookId);
+			book.PubHouseId = t.PubHouseId;
+			book.PublishYear = t.PublishYear;
+			book.NumPages = t.NumPages;
+			book.ISBN = t.ISBN;
+			book.Illustration = t.Illustration;
+			book.Title = t.Title;
 		}
 
 		public void Delete(long id)
 		{
 			var book = Get(id);
-			Books.Remove(book);
+			_items.Remove(book);
 		}
 	}
 }

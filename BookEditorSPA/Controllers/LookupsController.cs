@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using System.Web.Http;
-using BookEditor.Data.Models;
-using BookEditor.Data.Contracts;
+﻿using System.Web.Http;
+using BookEditor.Data.Repositories;
 
 //using BookEditor.Models;
 
@@ -11,19 +8,17 @@ namespace BookEditorSPA.Controllers
 {
 	public class LookupsController : ApiController
 	{
-		private readonly IAuthorRepository _authors;
-		private readonly IPubHouseRepository _pubHouses;
+		public IDataContext _dataContext { get; set; }
 
-		public LookupsController(IAuthorRepository authors, IPubHouseRepository pubHouses)
+		public LookupsController (IDataContext dataContext)
 		{
-			_authors = authors;
-			_pubHouses = pubHouses;
+			_dataContext = dataContext;
 		}
 
 		public IHttpActionResult Get()
 		{
-			var authors = _authors.Get();
-			var pubHouses = _pubHouses.Get();
+			var authors = _dataContext.GetAuthors();
+			var pubHouses = _dataContext.GetPubHouses();
 			return Ok(new {   authors,  pubHouses });
 		}
   

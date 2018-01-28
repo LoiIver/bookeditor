@@ -41,19 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\AuthorRepository.cs" />
-    <Compile Include="Contracts\PubHouseRepository.cs" />
+    <Compile Include="Contracts\IAuthorRepository.cs" />
+    <Compile Include="Contracts\IBookAuthorRepository.cs" />
+    <Compile Include="Contracts\IPubHouseRepository.cs" />
     <Compile Include="Contracts\IBookRepository.cs" />
+    <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\BookAuthors.cs" />
     <Compile Include="Models\PubHouse.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Book.cs" />
-    <Compile Include="Repositories\DataContext.cs" />
-    <Compile Include="Repositories\PubHouseRepository.cs" />
     <Compile Include="Repositories\AuthorRepository.cs" />
     <Compile Include="Repositories\BookRepository.cs" />
+    <Compile Include="Repositories\DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Repositories\IDataContext.cs" />
+    <Compile Include="Repositories\BookAuthorRepository.cs" />
+    <Compile Include="Repositories\PubHouseRepository.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

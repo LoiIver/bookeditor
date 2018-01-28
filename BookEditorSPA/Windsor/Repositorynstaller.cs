@@ -6,12 +6,16 @@ using Castle.Windsor;
 
 namespace BookEditorSPA.Windsor
 {
-	public class Repositorynstaller : IWindsorInstaller
+	public class ContextInstaller : IWindsorInstaller
 	{
 		public void Install(IWindsorContainer container, IConfigurationStore store)
 		{
+			container.Register(Component.For<IDataContext>().ImplementedBy<DataContext>()
+					.LifestyleSingleton());
 			container.Register(Component.For<IBookRepository>().ImplementedBy<BookRepository>()
-			.LifestyleSingleton());
+				.LifestyleSingleton());
+			container.Register(Component.For<IBookAuthorRepository>().ImplementedBy<BookAuthorRepository>()
+				.LifestyleSingleton());
 			container.Register(Component.For<IAuthorRepository>().ImplementedBy<AuthorRepository>()
 				.LifestyleSingleton());
 			container.Register(Component.For<IPubHouseRepository>().ImplementedBy<PubHouseRepository>()

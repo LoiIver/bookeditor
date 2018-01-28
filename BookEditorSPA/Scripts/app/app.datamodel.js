@@ -4,11 +4,9 @@
     self.siteUrl = "/";
 
     // Route operations
-    self.getBooksUrl = "/api/books";
+    self.booksUrl = "/api/books";
 
     self.getLookUps = "/api/lookups";
-
-	self.saveBookUrl = "/api/books";
     
     // Other private operations
 

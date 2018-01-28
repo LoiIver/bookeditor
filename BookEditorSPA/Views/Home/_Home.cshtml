@@ -1,100 +1,118 @@
-﻿<link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/examples/grid/grid.css"/>
- <!-- Latest compiled and minified JavaScript -->
- <!-- ko with: home -->
-<span data-bind="text:  books().length, visible: books().length > 0"></span>
- <h2 class="sub-header">Книги</h2>
-<div class="table-responsive"></div>
+﻿
+<!-- ko with: home -->
+<h2 class="sub-header">Книги</h2>
+<button class="btn btn-primary" data-bind='click: addBook'>Добавить книгу</button>
 <table class="table table-striped" data-bind="visible: books().length > 0">
 	<thead>
-	<tr>
-		<th>Название</th>
-		<th>Авторы</th>
-		<th>Количество страниц</th>
-		<th>Название издательства</th>
-		<th>Год публикации</th>
-		<th>ISBN</th>
-		<th>Изображение</th>
-	</tr>
+		<tr>
+			<th data-bind="click: sortBooks.bind($data, 'title')" style="cursor:pointer">
+				Заголовок
+				<span data-bind="visible:  byNameSorted,
+				  css:  { 'glyphicon-sort-by-alphabet':  acsendingSorOrder(),
+							'glyphicon-sort-by-alphabet-alt': !acsendingSorOrder()} "
+					  class="glyphicon" aria-hidden="true"
+					  style="float: right;"></span>
+			</th>
+			<th>Авторы</th>
+			<th>Количество страниц</th>
+			<th>Название издательства</th>
+			<th data-bind="click: sortBooks.bind($data, 'publishYear')" style="cursor:pointer">
+				Год публикации
+				<span data-bind="visible:  byPublishYearSorted,
+				  css:  { 'glyphicon-sort-by-order':  acsendingSorOrder(),
+							'glyphicon-sort-by-order-alt': !acsendingSorOrder()} "
+					  class="glyphicon" aria-hidden="true"
+					  style="float: right;"></span>
+			</th>
+			<th>ISBN</th>
+			<th>Изображение</th>
+			<th></th>
+			<th></th>
+		</tr>
 	</thead>
 	<tbody data-bind="foreach: books">
-	<tr data-bind="click: $parent.selectBook">
-		<td data-bind="text: title"></td>
-		<td data-bind="text: authors().length"></td>
-		<td data-bind="text: numPages"></td>
-		<td data-bind="text: pubHouseName"></td>
-		<td data-bind="text: publishYear"></td>
-		<td data-bind="text: isbn"></td>
-		<td><img data-bind="attr: {src: imageUrl}"/></td>
-	</tr>
+		<tr>
+			<td data-bind="text: title"></td>
+			<td data-bind="text: authorsNames"></td>
+			<td data-bind="text: numPages"></td>
+			<td data-bind="text: pubHouseName"></td>
+			<td data-bind="text: publishYear"></td>
+			<td data-bind="text: isbn"></td>
+			<td>
+				<img data-bind="attr: {src: imageUrl}" alt=""/></td>
+			<td>
+				<span class="glyphicon   glyphicon glyphicon-pencil" aria-hidden="true"
+					  data-bind="click: $parent.selectBook"
+					  title="Редактировать"></span>
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-remove"
+					  aria-hidden="true" title="Удалить"
+					  data-bind="click: $parent.removeBook"></span>
+			</td>
+		</tr>
 	</tbody>
 </table>
 
-<form data-bind="visible: (!!selectedBook), with: selectedBook" class="form-horizontal">
-	<div class="form-group row">
-		<label for="inputTitle">Название</label>
-		<input class="form-control" id="inputTitle"
-		        data-bind="value: title">
+@*Att visibility of view ,  to template*@
+<form class="form-horizontal" data-bind="with: selectedBook">
+	<div class="form-group">
+		<label for="inputTitle" class="control-label col-xs-2">Заголовок</label>
+		<div class="col-xs-10">
+			<input type="text" class="form-control" id="inputTitle" data-bind="value: title">
+		</div>
 	</div>
-	<div class="form-group row">
-		<label for="inputNumPages">Количество страниц</label>
-		<input class="form-control" id="inputNumPages"
-			     data-bind="value: numPages">
-	</div>
-	<div class="form-group row">
-		<label for="selectPubHouse">Издательство</label> 
-		<select id="selectPubHouse"
-		        data-bind="selectPicker:true, options: $parent.pubHouses ,
-				optionsText: 'name',  optionsValue: 'pubHouseId',
-				value: pubHouseId">
-		</select>
-	 
-	</div>
-	<div class="form-group row">
-		<label for="inputPublishYear">Год публикации</label>
-		<input class="form-control" id="inputPublishYear"
-		       data-bind="value: publishYear">
-	</div>
-	<div class="form-group row">
-		<label for="inputISBN">ISBN</label>
-		<input class="form-control" id="inputISBN"
-			   data-bind="value: isbn">
+	<div class="form-group">
+		<label for="seelctAuthors" class="control-label col-xs-2">Авторы</label>
+		<div class="col-xs-10">
+			<select class="selectpicker" multiple id="seelctAuthors"
+					data-live-search="true" data-container="body"
+					data-bind="selectPicker:true,
+					options: $parent.authors,
+					optionsText: function(item) {
+						return item.lastName() + ' '+ item.firstName();},
+					optionsValue: 'authorId',
+					selectedOptions: authors">
+			</select>
+		</div>
 	</div>
 
-	<div class="form-group row">
-		<label for="exampleInputFile">File input</label>
-		<input type="file" id="exampleInputFile">
-		<p class="help-block">Example block-level help text here.</p>
+	<div class="form-group">
+		<label for="inputNumPages" class="control-label col-xs-2">Количество страниц</label>
+		<div class="col-xs-10">
+			<input type="text" class="form-control" id="inputNumPages" data-bind="value: numPages">
+		</div>
 	</div>
-	 
-	<button  data-bind="click:  $parent.saveBook"  class="btn btn-default">Отправить</button>
+	<div class="form-group">
+		<label for="selectPubHouse" class="control-label col-xs-2">Издательство</label>
+		<div class="col-xs-10">
+			<select id="selectPubHouse"
+					data-bind="selectPicker:true, options: $parent.pubHouses ,
+					optionsText: 'name',  optionsValue: 'pubHouseId',
+					value: pubHouseId"></select>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputPublishYear" class="control-label col-xs-2">Год публикации</label>
+		<div class="col-xs-10">
+			<input type="text" class="form-control" id="inputPublishYear" data-bind="value: publishYear">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="inputISBN" class="control-label col-xs-2">ISBN</label>
+		<div class="col-xs-10">
+			<input type="text" class="form-control" id="inputISBN" data-bind="value: isbn">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-xs-offset-2 col-xs-10">
+			<button type="button" class="btn btn-primary"  data-bind="click: $parent.saveBook">Сохранить</button>
+			<button type="button" class="btn btn-basic" data-bind="click: $parent.cancelEdit">Отменить</button>
+
+		</div>
+	</div>
 </form>
-
-<button class="btn btn-primary" data-bind='click: addBook'>Добавить книгу</button>
-
-@*<div class="pagination" >
-	<ul>
-		<li><a href="#">1</a></li>
-		<li><a href="#">2</a></li>
-		<li><a href="#">3</a></li>
-		<li><a href="#">4</a></li>
-		<li><a href="#">Next</a></li>
-	</ul>
-</div>*@
-<select class="selectpicker" multiple>
-	<option>Mustard</option>
-	<option>Ketchup</option>
-	<option>Relish</option>
-</select>
-
-<select class="selectpicker" multiple title="Choose one of the following..." 
-		data-live-search="true" data-container="body">
-	<option data-content="<span class='label label-success'>Relish</span>">Relish</option>
-	<option data-content="<span class='label label-success'>Mustard</span>">Mustard</option>
-	<option data-content="<span class='label label-success'>Ketchup</span>">Ketchup</option>
-	<option data-content="<span class='label label-success'>Apple</span>">Apple</option>
-	<option data-content="<span class='label label-success'>Coffee</span>">Coffee</option>
-</select>
-
-
 <!-- /ko -->
-  

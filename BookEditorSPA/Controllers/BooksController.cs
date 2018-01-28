@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.Http;
 using BookEditor.Data.Models;
-using BookEditor.Data.Contracts;
+using BookEditor.Data.Repositories;
 
 //using BookEditor.Models;
 
@@ -11,58 +11,48 @@ namespace BookEditorSPA.Controllers
 {
 	public class BooksController : ApiController
 	{
-		private readonly IBookRepository _bookRepository;
+		private readonly IDataContext _dataContext;
 
-		public BooksController(IBookRepository repository)
+		public BooksController(IDataContext dataContext)
 		{
-			_bookRepository = repository;
+			_dataContext = dataContext;
 		}
 
 		public IHttpActionResult GetBooks()
 		{
-
 			//Att Task  await
-			var books = _bookRepository.Get()?.ToList();
+			var books = _dataContext.GetBooks();
 			if (books == null || !books.Any())
 				return NotFound();
 			return Ok(books);
 		}
 
-		public IHttpActionResult GetBook(int id)
+		public IHttpActionResult Get(long id)
 		{
 			var book =
-				_bookRepository.Get(id);
+				_dataContext.GetBook(id);
 			//Att Task  await
 			if (book == null)
 				return NotFound();
 			return Ok(book);
 		}
 
-//		[HttpPost]
-//		public IHttpActionResult EditBook(BookModel book)
-//		{
-//			//if (book.BookId == 0 ) 
-
-//			///	var book = _bookRepository.GetBook(book);
-//			//Att Task  await
-//			//		return _bookRepository.GetBook(id);
-//			if (!ModelState.IsValid)
-//			{
-//				return BadRequest(this.ModelState);
-//			}
-
-////			answer.UserId = User.Identity.Name;
-
-//	//		var isCorrect = await this.StoreAsync(answer);
-//			return this.Ok<bool>(true);
-//		}
-
-
-		public IHttpActionResult Post(Book book)
+		[HttpDelete]
+		public IHttpActionResult Delete(long id)
 		{
-			if (ModelState.IsValid)
-				;
-			return Ok("");
+			_dataContext.DeleteBook(id);
+			return Ok();
+		}
+	 
+
+		[HttpPut]
+		public IHttpActionResult Put(BookModel book)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			_dataContext.EditBook(book);
+			return Ok();
 		}
 	}
 }
