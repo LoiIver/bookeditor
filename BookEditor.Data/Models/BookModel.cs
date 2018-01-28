@@ -6,33 +6,43 @@ using System.Linq;
 
 namespace BookEditor.Data.Models
 {
-	public  sealed class BookModel :IValidatableObject
-
+	public sealed class BookModel : IValidatableObject
 	{
-		/*
-		 - заголовок (обязательный параметр, не более 30 символов)
-- список авторов (книга должна содержать хотя бы одного автора)
-	- имя автора (обязательный параметр, не более 20 символов)
-	- фамилия автора (обязательный параметр, не более 20 символов)
-- количество страниц (обязательный параметр, больше 0 и не более 10000)
-- название издательства (опциональный параметр, не более 30 символов)
-- год публикации (не раньше 1800)
-- ISBN с валидацией (http://en.wikipedia.org/wiki/International_Standard_Book_Number)
-- изображение (опциональный параметр)
- */
 		public long BookId { get; set; }
 		[Required]
+		[StringLength(30)]
 		public string Title { get; set; }
+		[Required]
+		[Range(0, 10000)]
 		public int NumPages { get; set; }
 		public long PubHouseId { get; set; }
+		[StringLength(30)]
 		public string PubHouseName { get; set; }
 		[Range(1800, Int32.MaxValue)]
 		public int? PublishYear { get; set; }
 		public string ISBN { get; set; }
-		public object Illustration { get; set; }
+		public byte[] Illustration { get; set; }
 
 		public List<long> Authors { get; set; }
 		public string AuthorsNames { get; set; }
+		public string IllustrationUrl { get; internal set; }
+
+		public BookModel(Book book, List<Author> thisBookAuthors, PubHouse pubHouse)
+		{
+			BookId = book.BookId;
+			Title = book.Title;
+			NumPages = book.NumPages;
+			PublishYear = book.PublishYear;
+			ISBN = book.ISBN;
+			Illustration = book.Illustration;
+			IllustrationUrl = book.Illustration != null
+				? $"data:image/png;base64; {Convert.ToBase64String(book.Illustration)}"
+				: "";
+			PubHouseId = book.PubHouseId;
+			PubHouseName = pubHouse.Name;
+			Authors = thisBookAuthors.Select(q => q.AuthorId).ToList();
+			AuthorsNames = string.Join("; ", thisBookAuthors.Select(aa => $"{aa.LastName} {aa.FirstName}"));
+		}
 
 		IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
 		{
@@ -40,9 +50,9 @@ namespace BookEditor.Data.Models
 			{
 				yield return new ValidationResult(
 					"Задан не корректный ISBN",
-					new [] { nameof(ISBN) });
+					new[] { nameof(ISBN) });
 			}
-			if (Authors == null  || !Authors.Any())
+			if (Authors == null || !Authors.Any())
 			{
 				yield return new ValidationResult(
 					"У книги должен быть как минимум один автор",

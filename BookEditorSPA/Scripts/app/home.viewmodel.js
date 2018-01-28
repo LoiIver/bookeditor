@@ -13,6 +13,7 @@
 	this.isbn = ko.observable(data.isbn);
 	this.imageUrl = ko.observable(data.imageUrl);
 	this.bookId = ko.observable(data.bookId);
+	this.illustrationUrl = ko.observable(data.illustrationUrl);
 }
 
 function PubHouse(data) {

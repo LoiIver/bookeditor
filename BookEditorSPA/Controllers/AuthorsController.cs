@@ -1,40 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using BookEditor.Data.Models;
 using BookEditor.Data.Repositories;
 
-//using BookEditor.Models;
-
-
 namespace BookEditorSPA.Controllers
 {
-	public class BooksController : BaseApiController
+	public class AuthorsController : BaseApiController
 	{
-		public BooksController(IDataContext dataContext)
+		public AuthorsController(IDataContext dataContext)
 			: base(dataContext)
 		{
 		}
-		public IHttpActionResult GetBooks()
+
+		public IHttpActionResult GetAuthors()
 		{
-	 
 			//Att Task  await
-			var books = _dataContext.GetBooks();
+			var books = _dataContext.GetAuthors();
 			if (books == null || !books.Any())
 				return NotFound();
 			return Ok(books);
 		}
 
-		public IHttpActionResult Get(long id)
-		{
-			var book =
-				_dataContext.GetBook(id);
-			//Att Task  await
-			if (book == null)
-				return NotFound();
-			return Ok(book);
-		}
-
+		 
 		[HttpDelete]
 		public IHttpActionResult Delete(long id)
 		{
@@ -44,12 +33,18 @@ namespace BookEditorSPA.Controllers
 	 
 
 		[HttpPut]
-		public IHttpActionResult Put(BookModel book)
+		public IHttpActionResult Put(AuthorModel author)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
-
-			_dataContext.EditBook(book);
+			try
+			{
+				_dataContext.EditAuthor(author);
+			}
+			catch (InvalidOperationException e)
+			{
+				
+			}
 			return Ok();
 		}
 	}

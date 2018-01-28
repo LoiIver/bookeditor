@@ -13,14 +13,10 @@ namespace BookEditor.Data.Repositories
 		private IBookAuthorRepository BookAuthors { get; set; }
 		private IPubHouseRepository PubHouses { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public DataContext(IBookRepository books,
 			IAuthorRepository authors,
 			IBookAuthorRepository bookAuthors,
-			IPubHouseRepository pubHouses
-			)
+			IPubHouseRepository pubHouses)
 		{
 			Books = books;
 			Authors = authors;
@@ -75,68 +71,62 @@ namespace BookEditor.Data.Repositories
 			#endregion authors
 
 			#region books
-			Book siz = new Book
+			var siz = new Book
 			{
 				BookId = 1,
 				Title = "Миф о Сизифе",
 				NumPages = 255,
 				PubHouseId = pros.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 1998
 			};
-			Book first = new Book
+			var first = new Book
 			{
 				BookId = 2,
 				Title = "Первый человек",
 				NumPages = 190,
 				PubHouseId = clever.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 2005
 			};
 
-			Book zar = new Book
+			var zar = new Book
 			{
 				BookId = 3,
 				Title = "Там говорил Заратустра",
 				NumPages = 217,
 				PubHouseId = azb.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 2010
 			};
 
-			Book three = new Book
+			var three = new Book
 			{
 				BookId = 4,
 				Title = "Три мушкетёра",
 				NumPages = 473,
 				PubHouseId = pros.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 1965
 			};
 
-			Book monday = new Book
+			var monday = new Book
 			{
 				BookId = 5,
 				Title = "Понедельник начинается в субботу",
 				NumPages = 230,
 				PubHouseId = pros.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 1978
 			};
 
-			Book outlaw = new Book
+			var outlaw = new Book
 			{
 				BookId = 6,
 				Title = "Отверженные",
 				NumPages = 890,
 				PubHouseId = ped.PubHouseId,
 				ISBN = "",
-				Illustration = "",
 				PublishYear = 1901
 			};
 
@@ -175,38 +165,24 @@ namespace BookEditor.Data.Repositories
 			var pubHouses = PubHouses.Get().Where(t => pubHouseIds.Contains(t.PubHouseId));
 
 			var bookIds = books.Select(t => t.BookId);
-			var t1 = BookAuthors.Get().Where(t => bookIds.Contains(t.BookId));
-			var t2 = Authors.Get();
-			var authors = t1.Join(t2,
+		 
+			var authors = BookAuthors.Get().Where(t => bookIds.Contains(t.BookId)).Join(Authors.Get(),
 				ba => ba.AuthorId,
 				a => a.AuthorId,
-			
 				( ba, a) =>
 				new
 				{
-					a.AuthorId,
 					ba.BookId,
-					a.FirstName,
-					a.LastName
+					author = a
 				});
 
 			var list = new List<BookModel>();
 			books.ForEach(t =>
 			{
-				var thisBookAuthors = authors.Where(a => a.BookId == t.BookId).ToList();
-				list.Add(new BookModel()
-				{
-					BookId = t.BookId,
-					Title = t.Title,
-					NumPages = t.NumPages,
-					PublishYear = t.PublishYear,
-					ISBN = t.ISBN,
-					Illustration = t.Illustration,
-					PubHouseId = t.PubHouseId,
-					PubHouseName = pubHouses.Single(p => p.PubHouseId == t.PubHouseId).Name,
-					Authors = thisBookAuthors.Select(q => q.AuthorId).ToList(),
-					AuthorsNames = String.Join(", ", thisBookAuthors.Select(aa => $"{aa.LastName} {aa.FirstName}"))
-				});
+				var thisBookAuthors = authors.Where(a => a.BookId == t.BookId).Select(q=> q.author).ToList();
+				var pubHouse = pubHouses.Single(p => p.PubHouseId == t.PubHouseId);
+				list.Add(new BookModel(t, thisBookAuthors, pubHouse));
+				
 			});
 			return list;
 		}
@@ -227,21 +203,8 @@ namespace BookEditor.Data.Repositories
 			var pubHouse = PubHouses.Get().Single(t => t.PubHouseId == book.PubHouseId);
 			var authors = Authors.Get()
 				.Join(BookAuthors.Get().Where(q => q.BookId == book.BookId), a => a.AuthorId, ba => ba.AuthorId, (a, ba) =>
-					new { a.AuthorId, ba.BookId, a.FirstName, a.LastName }).ToList();
-
-			var bookModel = new BookModel()
-			{
-				BookId = book.BookId,
-				Title = book.Title,
-				NumPages = book.NumPages,
-				PublishYear = book.PublishYear,
-				ISBN = book.ISBN,
-				Illustration = book.Illustration,
-				PubHouseId = book.PubHouseId,
-				PubHouseName = pubHouse.Name,
-				Authors = authors.Select(q => q.AuthorId).ToList(),
-				AuthorsNames = string.Join(", ", authors.Select(aa => $"{aa.LastName} {aa.FirstName}"))
-			};
+					a).ToList();
+			var bookModel = new BookModel(book, authors, pubHouse);
 			return bookModel;
 		}
 
@@ -260,8 +223,12 @@ namespace BookEditor.Data.Repositories
 				Illustration = book.Illustration,
 				Title = book.Title
 			}); 
-			
-			
 		}
+
+		public void EditAuthor(AuthorModel author)
+		{
+			throw new NotImplementedException();
+		}
+ 
 	}
 }

@@ -1,10 +1,6 @@
-﻿
-
-using System.Security.Policy;
-
-namespace BookEditor.Data.Models
+﻿namespace BookEditor.Data.Models
 {
-	public class Author
+	public sealed class Author
 
 	{
 		/*

@@ -12,5 +12,6 @@ namespace BookEditor.Data.Repositories
 		List<PubHouse> GetPubHouses();
 		BookModel GetBook(long id);
 		void EditBook(BookModel book);
+		void EditAuthor(AuthorModel author);
 	}
 }

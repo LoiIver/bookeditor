@@ -1,26 +1,19 @@
 ﻿using System.Web.Http;
 using BookEditor.Data.Repositories;
 
-//using BookEditor.Models;
-
-
 namespace BookEditorSPA.Controllers
 {
-	public class LookupsController : ApiController
+	public class LookupsController : BaseApiController
 	{
-		public IDataContext _dataContext { get; set; }
-
-		public LookupsController (IDataContext dataContext)
+		public LookupsController(IDataContext dataContext)
+			: base(dataContext)
 		{
-			_dataContext = dataContext;
 		}
-
 		public IHttpActionResult Get()
 		{
 			var authors = _dataContext.GetAuthors();
 			var pubHouses = _dataContext.GetPubHouses();
 			return Ok(new {   authors,  pubHouses });
 		}
-  
 	}
 }
