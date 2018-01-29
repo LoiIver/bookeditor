@@ -1,9 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using BookEditor.Data.Models;
 using BookEditor.Data.Repositories;
@@ -97,24 +96,27 @@ namespace BookEditor.Web.Controllers
 		[Route("api/books/upload/{id}")]
 		public async Task<HttpResponseMessage> PostFormData(int id)
 		{
-			// Check if the request contains multipart/form-data.
-			if (!Request.Content.IsMimeMultipartContent())
-			{
-				throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-			}
-
-		//	string root = HttpContext.Current.Server.MapPath("~/App_Data");
-		//	var provider = new MultipartFormDataStreamProvider(root);
-
 			try
 			{
-				// Read the form data.
-				byte[]  file = 
-					await Request.Content.ReadAsByteArrayAsync();
-				_dataContext.EditBookImage(id,file);
+				if (!Request.Content.IsMimeMultipartContent())
+				{
+					Request.CreateResponse(HttpStatusCode.BadRequest);
+				}
+
+				var provider = new MultipartFormDataMemoryStreamProvider();
+				await Request.Content.ReadAsMultipartAsync(provider).ContinueWith(p =>
+				{
+					var result = p.Result;
+					foreach (var stream in result.Contents.Where((content, idx) => result.IsStream(idx)))
+					{
+						var file = stream.ReadAsByteArrayAsync();
+						_dataContext.EditBookImage(id, file.Result);
+					}
+				});
+
 				return Request.CreateResponse(HttpStatusCode.OK);
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
 			}

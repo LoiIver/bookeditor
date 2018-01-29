@@ -42,7 +42,7 @@ namespace BookEditor.Data.Models
 			ISBN = book.ISBN;
 			Illustration = book.Illustration;
 			IllustrationUrl = book.Illustration != null
-				? $"data:image/jpg;base64,{Convert.ToBase64String(book.Illustration)}"
+				? $"data:image/jpeg;base64,{Convert.ToBase64String(book.Illustration)}"
 				: "";
 			PubHouseId = book.PubHouseId;
 			PubHouseName = pubHouse?.Name;

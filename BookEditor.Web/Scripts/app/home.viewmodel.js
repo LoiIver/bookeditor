@@ -30,15 +30,13 @@ function Author(data) {
 function HomeViewModel(app, dataModel) {
 	var self = this;
 	self.books = ko.observableArray([]);
-	self.unchangeableBooks = []; 
+	self.unchangeableBooks = [];
 	self.authors = ko.observableArray([]);
 	self.pubHouses = ko.observableArray([]);
 	self.selectedBook = ko.observable();
 	self.goingUploadImage = ko.observable(false);
 	self.goingEditForm = ko.observable(false);
 
-
-	
 	self.byNameSorted = ko.observable();
 	self.byPublishYearSorted = ko.observable();
 	self.ascendingSortOrder = ko.observable(true);
@@ -58,7 +56,7 @@ function HomeViewModel(app, dataModel) {
 				self.byNameSorted(true);
 				self.byPublishYearSorted(false);
 				break;
-			case "publishYear":				
+			case "publishYear":
 				self.books.sort(function (left, right) {
 					return (left.publishYear() === right.publishYear() ? 0 : (left.publishYear() < right.publishYear() ? -1 : 1))
 						* (self.ascendingSortOrder() === true ? 1 : -1);
@@ -74,9 +72,9 @@ function HomeViewModel(app, dataModel) {
 		var publishYear = localStorage.getItem("sortedByPublishYear");
 		var ascOrder = localStorage.getItem("ascendingSortOrder");
 		if (ascOrder != null)
-			self.ascendingSortOrder(ascOrder==="true");
+			self.ascendingSortOrder(ascOrder === "true");
 		if (name != null) {
-			self.byNameSorted(name==="true");
+			self.byNameSorted(name === "true");
 			if (name == "true")
 				sort("title");
 		}
@@ -86,7 +84,7 @@ function HomeViewModel(app, dataModel) {
 				sort("publishYear");
 		}
 	}
-	
+
 	self.getLookUps = function () {
 		$.getJSON(app.dataModel.getLookUps,
 			function (data) {
@@ -128,7 +126,7 @@ function HomeViewModel(app, dataModel) {
 		self.selectBook(item);
 		self.goingEditForm(true);
 	}
-	
+
 	self.showUploadForm = function (item) {
 		self.cancelEdit();
 		self.selectBook(item);
@@ -139,12 +137,11 @@ function HomeViewModel(app, dataModel) {
 		self.selectBook(null);
 	}
 
-
 	self.uploadImg = function (item) {
 		var formData = new FormData();
 		var fileSelect = document.getElementById('inputFile');
 		var file = fileSelect.files[0];
-		if (!!file && (file.type.match('image.*'))) {
+		if (!!file && (file.type.match('image.jpeg'))) {
 			debugger;
 			formData.append('illustration', file, file.name);
 			$.ajax({
@@ -154,12 +151,19 @@ function HomeViewModel(app, dataModel) {
 				contentType: false,
 				type: "POST",
 				success: function (data) {
-					alert(data);
+					alert("Изображение сохранено");
+					self.cancelUpload();
+					self.getBooks();
+				},
+				error: function () {
+					alert("Не удалось сохранить изображение");
 				}
+
 			});
-		}
+		} else
+			alert("Поддерживаются только jpg файлы");
 	}
-	
+
 	self.saveBook = function (book) {
 		if ($("form input:invalid").length > 0) {
 			alert("Сохранение нвеозможно, исправьте, пожалуйста, ошибки");
@@ -180,15 +184,21 @@ function HomeViewModel(app, dataModel) {
 				self.goingEditForm(false);
 				self.selectedBook(null);
 			},
-			error: function (data) {				
+			error: function (data) {
 				if (data.status === 400) {
 					var res = JSON.parse(data.responseText);
-
-					if (!res || !res.modelState) {
-						// default messages/actions here
+					var error = "";
+					if (!!res || !!res.modelState) {
+						if (!!res.modelState["book.ISBN"])
+							error = res.modelState["book.ISBN"] + "\r\n";
+						if (!!res.modelState["book.Authors"])
+							error = error + res.modelState["book.Authors"] + "\r\n";
+						alert(error);
 					}
-					var message = JSON.parse(data.responseText).message;
-					alert(message);
+					else {
+						var message = JSON.parse(data.responseText).message;
+						alert(message);
+					}
 				}
 			}
 		});
@@ -196,25 +206,24 @@ function HomeViewModel(app, dataModel) {
 
 	self.sortBooks = function (sortBy, data) {
 		debugger;
-		if (sortBy ==="title")
+		if (sortBy === "title")
 			if (self.byNameSorted())
 				self.ascendingSortOrder(!self.ascendingSortOrder());
-			else 
+			else
 				(self.ascendingSortOrder(true));
 		if (sortBy === "publishYear")
 			if (self.byPublishYearSorted())
 				self.ascendingSortOrder(!self.ascendingSortOrder());
-			else
+			else 
 				(self.ascendingSortOrder(true));
 		sort(sortBy);
 	};
 
-	
 	self.removeBook = function (book) {
-		if (confirm("Вы действительно хотите удалить книгу \""+ book.title()+"\"?")) {
+		if (confirm("Вы действительно хотите удалить книгу \"" + book.title() + "\"?")) {
 			$.ajax({
 				url: app.dataModel.booksUrl + "/" + book.bookId(),
-				type: "DELETE",				
+				type: "DELETE",
 				success: function (message) {
 					alert(message);
 					self.getBooks();
@@ -228,7 +237,7 @@ function HomeViewModel(app, dataModel) {
 	}
 
 	var refreshSelected = function (bookId) {
-		var book = self.unchangeableBooks.find(function(item) { return item.bookId === bookId; });
+		var book = self.unchangeableBooks.find(function (item) { return item.bookId === bookId; });
 		self.selectedBook().title(book.title);
 		self.selectedBook().authors(book.authors);
 		self.selectedBook().authorsNames(book.authorsNames);
@@ -239,19 +248,19 @@ function HomeViewModel(app, dataModel) {
 
 		self.selectedBook().publishYear(book.publishYear);
 		self.selectedBook().isbn(book.isbn);
-	
+
 		//self.selectedBook().imageUrl(book.imageUrl);
 		//self.selectedBook().bookId(book.bookId);
 		/*или так http://www.knockmeout.net/2011/03/guard-your-model-accept-or-cancel-edits.html*/
 	}
 
 	self.cancelEdit = function (item) {
-		if (!!item&& !!item.bookId()) {
+		if (!!item && !!item.bookId()) {
 			refreshSelected(item.bookId());
 		};
 		self.goingEditForm(false);
 		self.selectedBook(null);
-		
+
 	}
 	Sammy(function () {
 		this.get('#home', function () {
@@ -262,7 +271,7 @@ function HomeViewModel(app, dataModel) {
 		});
 		this.get('/', function () { this.app.runRoute('get', '#home') });
 	});
-	
+
 	return self;
 }
 

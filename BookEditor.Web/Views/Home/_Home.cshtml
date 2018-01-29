@@ -38,15 +38,14 @@
 			<td data-bind="text: pubHouseName"></td>
 			<td data-bind="text: publishYear"></td>
 			<td data-bind="text: isbn"></td>
-			<td><img data-bind="visible: (illustrationUrl() != ''), 
-					 attr: {src: illustrationUrl()}" alt="Иллюстрация"/></td>
+			 
+			<td><img data-bind="visible: (illustrationUrl() != ''), attr: {src: illustrationUrl()}" alt="Иллюстрация"/></td>
 			<td>
 				<span class="glyphicon glyphicon-camera"
 					  aria-hidden="true" title="Загрузить изображение"
 					  data-bind="click: $parent.showUploadForm"></span>
 			</td>
 			<td>
-				
 				<span class="glyphicon   glyphicon glyphicon-pencil" aria-hidden="true"
 					  data-bind="click: $parent.showEditForm"
 					  title="Редактировать"></span>
@@ -143,15 +142,12 @@
 
 
 <script type="text/html" id="_imageUploadTemplate">
-	<form class="form-horizontal">
+	<form class="form-horizontal" enctype="multipart/form-data">
 		<div class="form-group">
 			<label for="inputFile" class="control-label col-xs-2">Изображение</label>
 			<div class="col-xs-10">
 				<input type="file" class="form-control" id="inputFile">
 			</div>
-			@*data-bind="visible: illustrationUrl()!==''"*@
-			@*<p class="help-block" data-bind="visible: (illustrationUrl()!=='')">Изображение уже загружено. Если хотите обновить его, выберите файл</p>*@
-
 		</div>
 		<div class="form-group">
 			<div class="col-xs-offset-2 col-xs-10">
