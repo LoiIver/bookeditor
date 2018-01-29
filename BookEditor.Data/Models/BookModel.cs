@@ -29,6 +29,10 @@ namespace BookEditor.Data.Models
 		public string AuthorsNames { get; set; }
 		public string IllustrationUrl { get; internal set; }
 
+		public BookModel()
+		{
+		}
+
 		public BookModel(Book book, List<Author> thisBookAuthors, PubHouse pubHouse)
 		{
 			BookId = book.BookId;
@@ -68,20 +72,21 @@ namespace BookEditor.Data.Models
 				return false;
 
 			var pure = ISBN.Replace("-", "");
-			if (PublishYear >= 2017)
+			if (PublishYear >= 2007)
 			{
-				if (pure.Length != Const.DigitsInISBN)  
-					return false;
-				int sum = 0;
-				for (int i = 1; i <= 6; i = i + 2 )
-					sum = sum + pure[i-1] + 3* pure[i - 1];
-				sum += pure[12];
-				var reminder = sum/10;
+				//if (pure.Length != Const.DigitsInISBN)  
+				//	return false;
+				//int sum = 0;
+				//for (int i = 1; i <= 6; i = i + 2 )
+				//	sum = sum + pure[i-1] + 3* pure[i - 1];
+				//sum += pure[12];
+				//var reminder = sum/10;
 
-				return (10 - reminder == 7);
+				//return (10 - reminder == 7);
+				return true;
 			}
 			{
-				if (pure.Length != Const.DigitsInISBNBefore2017)  
+				if (pure.Length != Const.DigitsInISBNBefore2007)  
 					return false;
 				int sum = 0;
 				for (int i = 1; i <= 10; i++)

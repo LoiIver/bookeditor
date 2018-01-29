@@ -6,7 +6,7 @@ namespace BookEditor.Data.Contracts
 	{
 		T Get(long id);
 		List<T> Get();
-		void Add(T t);
+		long Add(T t);
 		void Update(T t);
 		void Delete(long id);
 	}

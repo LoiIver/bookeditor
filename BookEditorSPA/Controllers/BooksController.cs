@@ -23,7 +23,7 @@ namespace BookEditorSPA.Controllers
 		{
 	 
 			//Att Task  await
-			var books = _dataContext.GetBooks();
+			var books =   _dataContext.GetBooks();
 			if (books == null || !books.Any())
 				return NotFound();
 			return Ok(books);
@@ -46,14 +46,21 @@ namespace BookEditorSPA.Controllers
 			return Ok();
 		}
 	 
-
-		[HttpPut]
 		public IHttpActionResult Put(BookModel book)
 		{
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
 			_dataContext.EditBook(book);
+			return Ok();
+		}
+		
+		public IHttpActionResult Post(BookModel book)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			_dataContext.AddBook(book);
 			return Ok();
 		}
 
@@ -74,12 +81,12 @@ namespace BookEditorSPA.Controllers
 				// Read the form data.
 				await Request.Content.ReadAsMultipartAsync(provider);
 
-				// This illustrates how to get the file names.
-				//foreach (MultipartFileData file in provider.FileData)
-				//{
-				//	Trace.WriteLine(file.Headers.ContentDisposition.FileName);
-				//	Trace.WriteLine("Server file path: " + file.LocalFileName);
-				//}
+				//This illustrates how to get the file names.
+				foreach (MultipartFileData file in provider.FileData)
+				{
+					Trace.WriteLine(file.Headers.ContentDisposition.FileName);
+					Trace.WriteLine("Server file path: " + file.LocalFileName);
+				}
 
 				//// check if files are on the request.
 				//if (provider.FileStreams.Count == 0)
@@ -87,20 +94,20 @@ namespace BookEditorSPA.Controllers
 				//	// return return error response               
 				//}
 
-				IList<string> uploadedFiles = new List<string>();
+				//IList<string> uploadedFiles = new List<string>();
 
-				foreach (KeyValuePair<string, Stream> file in provider.FileStreams)
-				{
-					// get file name and file stream
-					byte[] photo;
-					string fileName = file.Key;
-					using (Stream stream = file.Value)
-					{
-						using (BinaryReader reader = new BinaryReader(stream))
-						{
-							photo = reader.ReadBytes((int)stream.Length);
-						}
-					}
+				//foreach (KeyValuePair<string, Stream> file in provider.FileStreams)
+				//{
+				//	// get file name and file stream
+				//	byte[] photo;
+				//	string fileName = file.Key;
+				//	using (Stream stream = file.Value)
+				//	{
+				//		using (BinaryReader reader = new BinaryReader(stream))
+				//		{
+				//			photo = reader.ReadBytes((int)stream.Length);
+				//		}
+				//	}
 					return Request.CreateResponse(HttpStatusCode.OK);
 			}
 			catch (System.Exception e)

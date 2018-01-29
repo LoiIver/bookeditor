@@ -8,17 +8,18 @@ namespace BookEditor.Data.Repositories
 	public class AuthorRepository  : IAuthorRepository
 	{
 
-		private  List<Author> _items  = new List<Author>();
+		private List<Author> _items  = new List<Author>();
 		public List<Author> Get()
 		{
 			return _items;
 		}
 
-		public void Add(Author t)
+		public long Add(Author t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.AuthorId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.AuthorId) : 0) + 1;
 			t.AuthorId = id;
 			_items.Add(t);
+			return id;
 		}
 
 		public   Author Get(long id)
@@ -32,7 +33,6 @@ namespace BookEditor.Data.Repositories
 			_items.Remove(author);
 		}
  
-
 		public void Update(Author t)
 		{
 			var author = Get(t.AuthorId);

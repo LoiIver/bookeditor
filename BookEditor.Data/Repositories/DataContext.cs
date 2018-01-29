@@ -220,7 +220,7 @@ namespace BookEditor.Data.Repositories
 				PublishYear = book.PublishYear,
 				NumPages = book.NumPages,
 				ISBN = book.ISBN,
-				Illustration = book.Illustration,
+			//	Illustration = book.Illustration,
 				Title = book.Title
 			}); 
 		}
@@ -229,6 +229,27 @@ namespace BookEditor.Data.Repositories
 		{
 			throw new NotImplementedException();
 		}
- 
+
+		public void AddBook(BookModel book)
+		{
+			var id = Books.Add(new Book
+			{
+				PubHouseId = book.PubHouseId,
+				PublishYear = book.PublishYear,
+				NumPages = book.NumPages,
+				ISBN = book.ISBN,
+				//Illustration = book.Illustration,
+				Title = book.Title
+			});
+			book.Authors.ForEach(t =>
+				BookAuthors.Add(new BookAuthors { BookId = id, AuthorId = t }));		 
+		}
+
+		public void DeleteAuthor(long id)
+		{
+			if(BookAuthors.Get().Any(t=> t.AuthorId== id))
+				throw new InvalidOperationException();
+			Authors.Delete(id);
+		}
 	}
 }

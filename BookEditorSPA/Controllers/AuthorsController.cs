@@ -14,20 +14,20 @@ namespace BookEditorSPA.Controllers
 		{
 		}
 
-		public IHttpActionResult GetAuthors()
+		public IHttpActionResult Get()
 		{
 			//Att Task  await
-			var books = _dataContext.GetAuthors();
-			if (books == null || !books.Any())
+			var authors = _dataContext.GetAuthors();
+			if (authors == null || !authors.Any())
 				return NotFound();
-			return Ok(books);
+			return Ok(authors);
 		}
+	 
 
-		 
 		[HttpDelete]
 		public IHttpActionResult Delete(long id)
 		{
-			_dataContext.DeleteBook(id);
+			_dataContext.DeleteAuthor(id);
 			return Ok();
 		}
 	 

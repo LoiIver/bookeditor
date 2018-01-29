@@ -30,11 +30,12 @@ namespace BookEditor.Data.Repositories
 			return _items;
 		}
 
-		public void Add(BookAuthors t)
+		public long Add(BookAuthors t)
 		{
 			long id = (_items.Any() ? _items.Max(a => a.BookAuthorId) : 0) + 1;
 			t.BookAuthorId = id;
 			_items.Add(t);
+			return id;
 		}
 
 		public BookAuthors Get(long id)

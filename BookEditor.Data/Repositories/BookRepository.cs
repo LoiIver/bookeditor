@@ -14,11 +14,12 @@ namespace BookEditor.Data.Repositories
 			return _items;
 		}
 
-		public void Add(Book t)
+		public long Add(Book t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.BookId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.BookId) : 0) + 1;
 			t.BookId = id;
 			_items.Add(t);
+			return id;
 		}
 
 		public   Book Get(long id)

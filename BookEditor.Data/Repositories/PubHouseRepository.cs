@@ -20,18 +20,18 @@ namespace BookEditor.Data.Repositories
 			return _items;
 		}
 
-		public void Add(PubHouse t)
+		public long Add(PubHouse t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.PubHouseId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.PubHouseId) : 0) + 1;
 			t.PubHouseId = id;
 			_items.Add(t);
+			return id;
 		}
 
 
 		public PubHouse Get(long id)
 		{
 			return _items.Single(t => t.PubHouseId == id);
-			;
 		}
  
 		public void Update(PubHouse t)

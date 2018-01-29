@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using BookEditor.Data.Contracts;
 using BookEditor.Data.Models;
 
 namespace BookEditor.Data.Repositories
@@ -13,5 +12,7 @@ namespace BookEditor.Data.Repositories
 		BookModel GetBook(long id);
 		void EditBook(BookModel book);
 		void EditAuthor(AuthorModel author);
+		void AddBook(BookModel book);
+		void DeleteAuthor(long id);
 	}
 }
