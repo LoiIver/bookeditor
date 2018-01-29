@@ -11,6 +11,7 @@ namespace BookEditor.Data.Repositories
 		IEnumerable<Author> GetAuthors();
 		IEnumerable<PubHouse> GetPubHouses();
 		BookModel GetBook(long id);
+		void EditBookImage(long id, byte[] img);
 		void EditBook(BookModel book);
 		void EditAuthor(AuthorModel author);
 		void AddBook(BookModel book);

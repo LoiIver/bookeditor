@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookEditor.Data", "BookEditor.Data\BookEditor.Data.csproj", "{D134D628-7E89-4AA6-81A9-EE89F6289B00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookEditorSPA", "BookEditorSPA\BookEditorSPA.csproj", "{9C80DE96-9219-4559-993F-ACDC6DE3A22D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookEditor.Web", "BookEditor.Web\BookEditor.Web.csproj", "{9C80DE96-9219-4559-993F-ACDC6DE3A22D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookEditorSPA.Tests", "BookEditorSPA.Tests\BookEditorSPA.Tests.csproj", "{B7EAA8A0-5C18-4D38-B361-EE4DC7A5083F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookEditor.Tests", "BookEditor.Tests\BookEditor.Tests.csproj", "{B7EAA8A0-5C18-4D38-B361-EE4DC7A5083F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

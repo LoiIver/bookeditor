@@ -203,12 +203,18 @@ namespace BookEditor.Data.Repositories
 			var book = Books.GetById(id);
 
 			var pubHouse = book.PubHouseId.HasValue ? PubHouses.GetById(book.PubHouseId.Value) : null;
-			
+
 			var authors = Authors.Get()
 				.Join(BookAuthors.Get().Where(q => q.BookId == book.BookId), a => a.AuthorId, ba => ba.AuthorId, (a, ba) =>
 					a).ToList();
 			var bookModel = new BookModel(book, authors, pubHouse);
 			return bookModel;
+		}
+
+		public void EditBookImage(long id, byte[] img)
+		{
+			var book = Books.GetById(id);
+			book.Illustration = img;
 		}
 
 		public void EditBook(BookModel book)
@@ -224,7 +230,6 @@ namespace BookEditor.Data.Repositories
 				PublishYear = book.PublishYear,
 				NumPages = book.NumPages,
 				ISBN = book.ISBN,
-				//	Illustration = book.Illustration,
 				Title = book.Title
 			});
 		}
@@ -242,7 +247,6 @@ namespace BookEditor.Data.Repositories
 				PublishYear = book.PublishYear,
 				NumPages = book.NumPages,
 				ISBN = book.ISBN,
-				//Illustration = book.Illustration,
 				Title = book.Title
 			});
 			book.Authors.ForEach(t =>

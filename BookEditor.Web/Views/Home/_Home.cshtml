@@ -1,0 +1,165 @@
+﻿<!-- ko with: home -->
+<h3 class="sub-header" sata-bind="click: selectBookTab">Книги</h3>
+<button class="btn btn-primary" data-bind='click: addBook'>Добавить книгу</button>
+<table class="table table-striped" data-bind="visible: books().length > 0">
+	<thead>
+		<tr>
+			<th data-bind="click: sortBooks.bind($data, 'title')" style="cursor:pointer">
+				Заголовок
+				<span data-bind="visible:  byNameSorted(),
+				  css:  { 'glyphicon-sort-by-alphabet': ascendingSortOrder(),
+							'glyphicon-sort-by-alphabet-alt': !ascendingSortOrder()} "
+					  class="glyphicon" aria-hidden="true"
+					  style="float: right;"></span>
+			</th>
+			<th>Авторы</th>
+			<th>Количество страниц</th>
+			<th>Название издательства</th>
+			<th data-bind="click: sortBooks.bind($data, 'publishYear')" style="cursor:pointer">
+				Год публикации
+				<span data-bind="visible:  byPublishYearSorted(),
+				  css:  { 'glyphicon-sort-by-order': ascendingSortOrder(),
+							'glyphicon-sort-by-order-alt': !ascendingSortOrder()} "
+					  class="glyphicon" aria-hidden="true"
+					  style="float: right;"></span>
+			</th>
+			<th>ISBN</th>
+			<th>Изображение</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody data-bind="foreach: books">
+		<tr>
+			<td data-bind="text: title"></td>
+			<td data-bind="text: authorsNames"></td>
+			<td data-bind="text: numPages"></td>
+			<td data-bind="text: pubHouseName"></td>
+			<td data-bind="text: publishYear"></td>
+			<td data-bind="text: isbn"></td>
+			<td><img data-bind="visible: (illustrationUrl() != ''), 
+					 attr: {src: illustrationUrl()}" alt="Иллюстрация"/></td>
+			<td>
+				<span class="glyphicon glyphicon-camera"
+					  aria-hidden="true" title="Загрузить изображение"
+					  data-bind="click: $parent.showUploadForm"></span>
+			</td>
+			<td>
+				
+				<span class="glyphicon   glyphicon glyphicon-pencil" aria-hidden="true"
+					  data-bind="click: $parent.showEditForm"
+					  title="Редактировать"></span>
+			</td>
+			<td>
+				<span class="glyphicon glyphicon-remove"
+					  aria-hidden="true" title="Удалить"
+					  data-bind="click: $parent.removeBook"></span>
+			</td>
+
+			
+		</tr>
+	</tbody>
+</table>
+<div data-bind="template: { name: '_bookEditTemplate', data: selectedBook,
+	  if: goingEditForm()}">
+</div>
+
+<div data-bind="template: { name: '_imageUploadTemplate', data: selectedBook, 
+	 if: goingUploadImage()}">
+</div>
+
+
+<script type="text/html" id="_bookEditTemplate">
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="inputTitle" class="control-label col-xs-2">Заголовок
+				<small><span class="glyphicon glyphicon-asterisk"></span></small>
+			</label>
+			<div class="col-xs-10">
+
+				<input type="text" required="required" class="form-control" id="inputTitle"
+				       data-bind="value: title" maxlength="30">
+
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="seelctAuthors" class="control-label col-xs-2">Авторы
+				<small><span class="glyphicon glyphicon-asterisk"></span></small>
+			</label>
+			<div class="col-xs-10">
+				<select class="selectpicker" multiple id="seelctAuthors"
+				        data-live-search="true" data-container="body"
+				        data-bind="selectPicker:true,
+					options: $parent.authors,
+					optionsText: function(item) {
+						return item.lastName() + ' '+ item.firstName();},
+					optionsValue: 'authorId',
+					selectedOptions: authors"></select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="inputNumPages" class="control-label col-xs-2">Количество страниц
+				<small><span class="glyphicon glyphicon-asterisk"></span></small>
+			</label>
+			<div class="col-xs-10">
+				<input type="number" required class="form-control" id="inputNumPages" data-bind="value: numPages" min="1" max="10000">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="selectPubHouse" class="control-label col-xs-2">Издательство</label>
+			<div class="col-xs-10">
+				<select id="selectPubHouse"
+						data-bind="selectPicker: true, options: $parent.pubHouses ,
+					optionsText: 'name',  optionsValue: 'pubHouseId',
+					value: pubHouseId"></select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="inputPublishYear" class="control-label col-xs-2">Год публикации</label>
+			<div class="col-xs-10">
+				<input type="number" class="form-control" id="inputPublishYear" data-bind="value: publishYear" min="1800">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="inputISBN" class="control-label col-xs-2">ISBN</label>
+			<div class="col-xs-10">
+				<input type="text" class="form-control" id="inputISBN" data-bind="value: isbn">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-xs-offset-2 col-xs-10">
+				<button type="button" class="btn btn-primary" data-bind="click: $parent.saveBook">Сохранить</button>
+				<button type="button" class="btn btn-basic" data-bind="click: $parent.cancelEdit">Отменить</button>
+
+			</div>
+		</div>
+	</form>
+</script>
+
+
+<script type="text/html" id="_imageUploadTemplate">
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label for="inputFile" class="control-label col-xs-2">Изображение</label>
+			<div class="col-xs-10">
+				<input type="file" class="form-control" id="inputFile">
+			</div>
+			@*data-bind="visible: illustrationUrl()!==''"*@
+			@*<p class="help-block" data-bind="visible: (illustrationUrl()!=='')">Изображение уже загружено. Если хотите обновить его, выберите файл</p>*@
+
+		</div>
+		<div class="form-group">
+			<div class="col-xs-offset-2 col-xs-10">
+				<button type="button" class="btn btn-primary" data-bind="click: $parent.uploadImg">Сохранить</button>
+				<button type="button" class="btn btn-basic" data-bind="click: $parent.cancelUpload">Отменить</button>
+
+			</div>
+		</div>
+	</form>
+</script>
+<!-- /ko -->
