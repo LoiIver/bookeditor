@@ -11,7 +11,7 @@
 
 	this.publishYear = ko.observable(data.publishYear);
 	this.isbn = ko.observable(data.isbn);
-	this.imageUrl = ko.observable(data.imageUrl);
+	//this.imageUrl = ko.observable(data.imageUrl);
 	this.bookId = ko.observable(data.bookId);
 	this.illustrationUrl = ko.observable(data.illustrationUrl);
 }
@@ -57,14 +57,6 @@ function HomeViewModel(app, dataModel) {
 
 	self.getLookUps();
 
-	Sammy(function () {
-		this.get('#home', function () {
-			self.getBooks();
-		});
-		this.get('/', function () { this.app.runRoute('get', '#home') });
-	});
-
-
 	self.selectBook = function (item) {
 		self.selectedBook(item);
 	}
@@ -81,6 +73,26 @@ function HomeViewModel(app, dataModel) {
 		self.selectedBook(new Book({ title: "Новая книга" }));
 	}
 
+	self.uploadImg = function (item) {
+		var formData = new FormData();
+		var fileSelect = document.getElementById('inputFile');
+		var file = fileSelect.files[0];
+		if (!!file && (file.type.match('image.*'))) {
+			formData.append('illustration', file, file.name);
+			$.ajax({
+				url: app.dataModel.bookImgUploadUrl,
+				data: formData,
+				processData: false,
+				contentType: false,
+				type: 'POST',
+				success: function (data) {
+					alert(data);
+				}
+			});
+		}
+	}
+	
+
 	self.saveBook = function (book) {
 		$.ajax({
 			url: app.dataModel.booksUrl,
@@ -90,10 +102,9 @@ function HomeViewModel(app, dataModel) {
 			success: function (data) {
 				self.getBooks();
 				self.selectedBook(null);
-				
 			},
 			error: function (x, y, z) {
-				alert(x + '\n' + y + '\n' + z);
+				alert(x + '\n' + y + '\n' + z); //Att
 			}
 		});
 	};
@@ -161,8 +172,16 @@ function HomeViewModel(app, dataModel) {
 		};
 		self.selectedBook(null);
 	}
+	Sammy(function () {
+		this.get('#home', function () {
+			self.getBooks();
+		});
+		this.get('#authors', function () {
+			self.getAuthors();
+		});
+		this.get('/', function () { this.app.runRoute('get', '#home') });
+	});
 
-	
 	return self;
 }
 

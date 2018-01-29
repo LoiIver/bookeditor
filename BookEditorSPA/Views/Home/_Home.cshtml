@@ -28,6 +28,7 @@
 			<th>Изображение</th>
 			<th></th>
 			<th></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody data-bind="foreach: books">
@@ -38,9 +39,15 @@
 			<td data-bind="text: pubHouseName"></td>
 			<td data-bind="text: publishYear"></td>
 			<td data-bind="text: isbn"></td>
+			<td><img data-bind="visible: (illustrationUrl() != ''), 
+					 attr: {src: illustrationUrl()}" alt="Иллюстрация"/></td>
 			<td>
-				<img data-bind="attr: {src: imageUrl}" alt=""/></td>
+				<span class="glyphicon glyphicon-camera"
+					  aria-hidden="true" title="Загрузить изображение"
+					  data-bind="click: $parent.uploadImg"></span>
+			</td>
 			<td>
+				
 				<span class="glyphicon   glyphicon glyphicon-pencil" aria-hidden="true"
 					  data-bind="click: $parent.selectBook"
 					  title="Редактировать"></span>
@@ -50,6 +57,8 @@
 					  aria-hidden="true" title="Удалить"
 					  data-bind="click: $parent.removeBook"></span>
 			</td>
+
+			
 		</tr>
 	</tbody>
 </table>
@@ -66,8 +75,8 @@
 		<label for="seelctAuthors" class="control-label col-xs-2">Авторы</label>
 		<div class="col-xs-10">
 			<select class="selectpicker" multiple id="seelctAuthors"
-					data-live-search="true" data-container="body"
-					data-bind="selectPicker:true,
+			        data-live-search="true" data-container="body"
+			        data-bind="selectPicker:true,
 					options: $parent.authors,
 					optionsText: function(item) {
 						return item.lastName() + ' '+ item.firstName();},
@@ -87,7 +96,7 @@
 		<label for="selectPubHouse" class="control-label col-xs-2">Издательство</label>
 		<div class="col-xs-10">
 			<select id="selectPubHouse"
-					data-bind="selectPicker:true, options: $parent.pubHouses ,
+			        data-bind="selectPicker:true, options: $parent.pubHouses ,
 					optionsText: 'name',  optionsValue: 'pubHouseId',
 					value: pubHouseId"></select>
 		</div>
@@ -100,15 +109,7 @@
 		</div>
 	</div>
 
-	@*<div class="form-group">
-		<span data-bind="visible: illustrationUrl()!==''">
-			Изображение уже загружено. Если хотите обновить его, выберите файл
-		</span>
-		<label for="inputFile" class="control-label col-xs-2">Изображение</label>
-		<div class="col-xs-10">
-			<input type="file" class="form-control" id="inputFile" data-bind="value: isbn">
-		</div>
-	</div>*@
+
 
 	<div class="form-group">
 		<label for="inputISBN" class="control-label col-xs-2">ISBN</label>
@@ -119,10 +120,23 @@
 
 	<div class="form-group">
 		<div class="col-xs-offset-2 col-xs-10">
-			<button type="button" class="btn btn-primary"  data-bind="click: $parent.saveBook">Сохранить</button>
+			<button type="button" class="btn btn-primary" data-bind="click: $parent.saveBook">Сохранить</button>
 			<button type="button" class="btn btn-basic" data-bind="click: $parent.cancelEdit">Отменить</button>
 
 		</div>
 	</div>
 </form>
+
+
+
+<div class="form-group">
+	<label for="inputFile" class="control-label col-xs-2">Изображение</label>
+	<div class="col-xs-10">
+		<input type="file" class="form-control" id="inputFile">
+	</div>
+	@*data-bind="visible: illustrationUrl()!==''"*@ 
+	<p 
+	   class="help-block">Изображение уже загружено. Если хотите обновить его, выберите файл</p>
+
+</div>
 <!-- /ko -->

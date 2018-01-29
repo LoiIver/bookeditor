@@ -75,63 +75,63 @@ namespace BookEditor.Data.Repositories
 			{
 				BookId = 1,
 				Title = "Миф о Сизифе",
-				NumPages = 255,
+				NumPages = 384,
 				PubHouseId = pros.PubHouseId,
-				ISBN = "",
-				PublishYear = 1998
+				ISBN = "978-5-17-083384-9",
+				PublishYear = 2014
 			};
-			var first = new Book
+			var sob = new Book
 			{
 				BookId = 2,
-				Title = "Первый человек",
-				NumPages = 190,
+				Title = "Собор Парижской Богоматери",
+				NumPages = 656,
 				PubHouseId = clever.PubHouseId,
-				ISBN = "",
-				PublishYear = 2005
+				ISBN = "978-5-699-38153-1",
+				PublishYear = 2011
 			};
 
 			var zar = new Book
 			{
 				BookId = 3,
-				Title = "Там говорил Заратустра",
-				NumPages = 217,
+				Title = "Так говорил Заратустра",
+				NumPages = 320,
 				PubHouseId = azb.PubHouseId,
-				ISBN = "",
-				PublishYear = 2010
+				ISBN = "978-5-17-082222-5",
+				PublishYear = 2017
 			};
 
 			var three = new Book
 			{
 				BookId = 4,
 				Title = "Три мушкетёра",
-				NumPages = 473,
+				NumPages = 958,
 				PubHouseId = pros.PubHouseId,
-				ISBN = "",
-				PublishYear = 1965
+				ISBN = "5-224-04981-4",
+				PublishYear = 2005
 			};
 
 			var monday = new Book
 			{
 				BookId = 5,
 				Title = "Понедельник начинается в субботу",
-				NumPages = 230,
+				NumPages = 320,
 				PubHouseId = pros.PubHouseId,
-				ISBN = "",
-				PublishYear = 1978
+				ISBN = "978-5-17-090334-4",
+				PublishYear = 2017
 			};
 
 			var outlaw = new Book
 			{
 				BookId = 6,
 				Title = "Отверженные",
-				NumPages = 890,
+				NumPages = 1248,
 				PubHouseId = ped.PubHouseId,
-				ISBN = "",
-				PublishYear = 1901
+				ISBN = "978-5-389-06864-3",
+				PublishYear = 2014
 			};
 
 			Books.Add(siz);
-			Books.Add(first);
+			Books.Add(sob);
 			Books.Add(zar);
 			Books.Add(three);
 			Books.Add(monday);
@@ -140,7 +140,7 @@ namespace BookEditor.Data.Repositories
 
 			#region book authors
 			BookAuthors.Add(new BookAuthors { BookAuthorId = 1, BookId = siz.BookId, AuthorId = kamu.AuthorId });
-			BookAuthors.Add(new BookAuthors { BookAuthorId = 2, BookId = first.BookId, AuthorId = kamu.AuthorId });
+			BookAuthors.Add(new BookAuthors { BookAuthorId = 2, BookId = sob.BookId, AuthorId = gugo.AuthorId });
 			BookAuthors.Add(new BookAuthors { BookAuthorId = 3, BookId = zar.BookId, AuthorId = nizh.AuthorId });
 			BookAuthors.Add(new BookAuthors { BookAuthorId = 4, BookId = three.BookId, AuthorId = duma.AuthorId });
 			BookAuthors.Add(new BookAuthors { BookAuthorId = 5, BookId = outlaw.BookId, AuthorId = gugo.AuthorId });

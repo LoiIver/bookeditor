@@ -18,8 +18,10 @@ namespace BookEditor.Data.Models
 		public long PubHouseId { get; set; }
 		[StringLength(30)]
 		public string PubHouseName { get; set; }
-		[Range(1800, Int32.MaxValue)]
+		[Range(1800, int.MaxValue)]
 		public int? PublishYear { get; set; }
+		[RegularExpression("^[0123456789-]+$",
+			ErrorMessage = "Указаны недопустимые символы в ISBN")]
 		public string ISBN { get; set; }
 		public byte[] Illustration { get; set; }
 
@@ -62,7 +64,31 @@ namespace BookEditor.Data.Models
 
 		private bool CheckISBN()
 		{
-			return true;
+			if (string.IsNullOrWhiteSpace(ISBN))
+				return false;
+
+			var pure = ISBN.Replace("-", "");
+			if (PublishYear >= 2017)
+			{
+				if (pure.Length != Const.DigitsInISBN)  
+					return false;
+				int sum = 0;
+				for (int i = 1; i <= 6; i = i + 2 )
+					sum = sum + pure[i-1] + 3* pure[i - 1];
+				sum += pure[12];
+				var reminder = sum/10;
+
+				return (10 - reminder == 7);
+			}
+			{
+				if (pure.Length != Const.DigitsInISBNBefore2017)  
+					return false;
+				int sum = 0;
+				for (int i = 1; i <= 10; i++)
+					sum = sum + pure[i-1]*i;
+				return (sum/11 == 0);
+			}
+
 		}
 	}
 }

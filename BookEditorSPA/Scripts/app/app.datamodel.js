@@ -5,6 +5,7 @@
 
     // Route operations
     self.booksUrl = "/api/books";
+    self.bookImgUploadUrl = "/api/books/upload";
 
     self.getLookUps = "/api/lookups";
     
