@@ -119,6 +119,7 @@ function HomeViewModel(app, dataModel) {
 
 	self.addBook = function () {
 		self.selectedBook(new Book({ title: "Новая книга", numPages: 1, publishYear: (new Date()).getFullYear() }));
+		self.goingEditForm(true);
 	}
 
 	self.showEditForm = function (item) {
