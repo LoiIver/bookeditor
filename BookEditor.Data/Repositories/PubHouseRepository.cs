@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
-using BookEditor.Data.Models;
+using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Repositories
 {
@@ -15,23 +15,23 @@ namespace BookEditor.Data.Repositories
 			throw new NotImplementedException();
 		}
 
-		public List<PubHouse> Get()
+		public IEnumerable<PubHouse> Get()
 		{
 			return _items;
 		}
 
-		public void Add(PubHouse t)
+		public long Add(PubHouse t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.PubHouseId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.PubHouseId) : 0) + 1;
 			t.PubHouseId = id;
 			_items.Add(t);
+			return id;
 		}
 
 
-		public PubHouse Get(long id)
+		public PubHouse GetById(long id)
 		{
 			return _items.Single(t => t.PubHouseId == id);
-			;
 		}
  
 		public void Update(PubHouse t)

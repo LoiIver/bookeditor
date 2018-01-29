@@ -1,41 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
-using BookEditor.Data.Models;
+using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Repositories
 {
 	public class AuthorRepository  : IAuthorRepository
 	{
 
-		private  List<Author> _items  = new List<Author>();
-		public List<Author> Get()
+		private List<Author> _items  = new List<Author>();
+		public IEnumerable<Author> Get()
 		{
 			return _items;
 		}
 
-		public void Add(Author t)
+		public long Add(Author t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.AuthorId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.AuthorId) : 0) + 1;
 			t.AuthorId = id;
 			_items.Add(t);
+			return id;
 		}
 
-		public   Author Get(long id)
+		public   Author GetById(long id)
 		{
 			return _items.Single(t => t.AuthorId == id);
 		}
 
 		public void Delete(long id)
 		{
-			var author = Get(id);
+			var author = GetById(id);
 			_items.Remove(author);
 		}
  
-
 		public void Update(Author t)
 		{
-			var author = Get(t.AuthorId);
+			var author = GetById(t.AuthorId);
 			author.FirstName = t.FirstName;
 			author.LastName = t.LastName;
 		}

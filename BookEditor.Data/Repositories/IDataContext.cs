@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BookEditor.Data.Contracts;
+using BookEditor.Data.DataModels;
 using BookEditor.Data.Models;
 
 namespace BookEditor.Data.Repositories
@@ -7,10 +7,14 @@ namespace BookEditor.Data.Repositories
 	public interface IDataContext
 	{
 		void DeleteBook(long id);
-		List<BookModel> GetBooks();
-		List<Author> GetAuthors();
-		List<PubHouse> GetPubHouses();
+		IEnumerable<BookModel> GetBooks();
+		IEnumerable<Author> GetAuthors();
+		IEnumerable<PubHouse> GetPubHouses();
 		BookModel GetBook(long id);
+		void EditBookImage(long id, byte[] img);
 		void EditBook(BookModel book);
+		void EditAuthor(AuthorModel author);
+		void AddBook(BookModel book);
+		void DeleteAuthor(long id);
 	}
 }

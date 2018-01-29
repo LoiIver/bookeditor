@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
-using BookEditor.Data.Models;
+using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Repositories
 {
@@ -9,26 +9,27 @@ namespace BookEditor.Data.Repositories
 	{
 		private readonly List<Book> _items = new List<Book>();
 
-		public  List<Book> Get()
+		public  IEnumerable<Book> Get()
 		{
 			return _items;
 		}
 
-		public void Add(Book t)
+		public long Add(Book t)
 		{
-			long id = (_items.Any() ? _items.Max(a => a.BookId) : 0) + 1;
+			var id = (_items.Any() ? _items.Max(a => a.BookId) : 0) + 1;
 			t.BookId = id;
 			_items.Add(t);
+			return id;
 		}
 
-		public   Book Get(long id)
+		public  Book GetById(long id)
 		{
 			return _items.Single(t => t.BookId == id);
 		}
 
 		public void Update(Book t)
 		{
-			var book = Get(t.BookId);
+			var book = GetById(t.BookId);
 			book.PubHouseId = t.PubHouseId;
 			book.PublishYear = t.PublishYear;
 			book.NumPages = t.NumPages;
@@ -39,7 +40,7 @@ namespace BookEditor.Data.Repositories
 
 		public void Delete(long id)
 		{
-			var book = Get(id);
+			var book = GetById(id);
 			_items.Remove(book);
 		}
 	}
