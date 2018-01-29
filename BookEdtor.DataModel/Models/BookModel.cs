@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using BookEditor.Data.DataModels;
 
-namespace BookEditor.Data.Models
+namespace BookEdtor.DataModel.Models
 {
 	public sealed class BookModel : IValidatableObject
 	{
@@ -13,7 +12,7 @@ namespace BookEditor.Data.Models
 		[StringLength(30)]
 		public string Title { get; set; }
 		[Required]
-		[Range(1, 10000)]
+		[Range(0, 10000)]
 		public int NumPages { get; set; }
 		public long PubHouseId { get; set; }
 		[StringLength(30)]
@@ -72,42 +71,28 @@ namespace BookEditor.Data.Models
 				return false;
 
 			var pure = ISBN.Replace("-", "");
-			try
+			if (PublishYear >= 2007)
 			{
-				if (PublishYear >= 2007)
-				{
+				//if (pure.Length != Const.DigitsInISBN)  
+				//	return false;
+				//int sum = 0;
+				//for (int i = 1; i <= 6; i = i + 2 )
+				//	sum = sum + pure[i-1] + 3* pure[i - 1];
+				//sum += pure[12];
+				//var reminder = sum/10;
 
-					if (pure.Length != Const.DigitsInISBN)
-						return false;
-
-					var sum = 0;
-					for (var i = 1; i < 12; i = i + 2)
-					{
-						var first = int.Parse(pure[i - 1].ToString());
-						var second = int.Parse(pure[i].ToString());
-						sum = sum + first + 3 * second;
-					}
-					var last = int.Parse(pure[12].ToString());
-					var reminder = sum % 10;
-
-					return (10 - reminder == last);
-				}
-				else
-				{
-					if (pure.Length != Const.DigitsInISBNBefore2007)
-						return false;
-					var sum = 0;
-					for (var i = 0; i <= 9; i++)
-					{
-						sum = sum + int.Parse(pure[i].ToString()) * (10 - i);
-					}
-					return (sum % 11 == 0);
-				}
+				//return (10 - reminder == 7);
+				return true;
 			}
-			catch
 			{
-				return false;
+				if (pure.Length != Const.DigitsInISBNBefore2007)  
+					return false;
+				int sum = 0;
+				for (int i = 1; i <= 10; i++)
+					sum = sum + pure[i-1]*i;
+				return (sum/11 == 0);
 			}
+
 		}
 	}
 }

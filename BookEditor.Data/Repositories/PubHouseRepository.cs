@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
-using BookEditor.Data.Models;
+using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Repositories
 {
@@ -15,7 +15,7 @@ namespace BookEditor.Data.Repositories
 			throw new NotImplementedException();
 		}
 
-		public List<PubHouse> Get()
+		public IEnumerable<PubHouse> Get()
 		{
 			return _items;
 		}
@@ -29,7 +29,7 @@ namespace BookEditor.Data.Repositories
 		}
 
 
-		public PubHouse Get(long id)
+		public PubHouse GetById(long id)
 		{
 			return _items.Single(t => t.PubHouseId == id);
 		}

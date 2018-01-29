@@ -22,10 +22,14 @@ namespace BookEditorSPA
 				"~/Scripts/knockout-{version}.js",
 				"~/Scripts/knockout.validation.js"));
 
+			bundles.Add(new ScriptBundle("~/bundles/libs").Include(
+				"~/Scripts/app/selecrPicker.js",
+				"~/Scripts/app/toastr.min.js"));
+
+
 			bundles.Add(new ScriptBundle("~/bundles/app").Include(
 				"~/Scripts/sammy-{version}.js",
-				"~/Scripts/app/common.js",
-				"~/Scripts/app/selecrPicker.js",
+				"~/Scripts/app/common.js",			
 				"~/Scripts/app/app.datamodel.js",
 				"~/Scripts/app/app.viewmodel.js",
 				"~/Scripts/app/home.viewmodel.js",
@@ -37,12 +41,14 @@ namespace BookEditorSPA
 				"~/Scripts/modernizr-*"));
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+
 				"~/Scripts/bootstrap-select.js",
 				"~/Scripts/bootstrap.js",
 				"~/Scripts/respond.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
-				 "~/Content/bootstrap-select.css",
+				"~/Content/toastr.min.css",
+				 "~/Content/bootstrap-select.min.css",
 				 "~/Content/bootstrap.css",
 				 "~/Content/Site.css"));
 		}

@@ -3,9 +3,9 @@
 namespace BookEditor.Data.Contracts
 {
 	public interface IRepository<T>  where  T: class
-	{
-		T Get(long id);
-		List<T> Get();
+	{		
+		IEnumerable<T> Get();
+		T GetById(long id);
 		long Add(T t);
 		void Update(T t);
 		void Delete(long id);

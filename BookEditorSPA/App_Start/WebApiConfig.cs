@@ -13,18 +13,12 @@ namespace BookEditorSPA
 	{
 		public static void Register(HttpConfiguration config)
 		{
-			// Web API configuration and services
-			// Configure Web API to use only bearer token authentication.
-			//	config.SuppressDefaultHostAuthentication();
-			//		config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
-
-			// Use camel case for JSON data.
+	 		
 			config.Formatters.Remove(config.Formatters.XmlFormatter);
 			config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 			
-		//	config.Filters.Add(new ValidationActionFilter()); //attt!!
-
-			// Web API routes
+			config.Filters.Add(new ValidateModelAttribute());  
+	
 			config.MapHttpAttributeRoutes();
 
 			config.Routes.MapHttpRoute(

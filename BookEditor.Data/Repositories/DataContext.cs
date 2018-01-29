@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
+using BookEditor.Data.DataModels;
 using BookEditor.Data.Models;
+
 
 namespace BookEditor.Data.Repositories
 {
@@ -27,7 +29,6 @@ namespace BookEditor.Data.Repositories
 
 		private void Populate()
 		{
-
 			#region pubhouses
 			var pros = new PubHouse { PubHouseId = 1, Name = "Просвещение" };
 			var ped = new PubHouse { PubHouseId = 2, Name = "Педагогическая книга" };
@@ -155,9 +156,9 @@ namespace BookEditor.Data.Repositories
 			Books.Delete(id);
 		}
 
-		public List<BookModel> GetBooks()
+		public IEnumerable<BookModel> GetBooks()
 		{
-			var books = Books.Get();
+			var books = Books.Get()?.ToList();
 			if (books == null || !books.Any())
 				return Enumerable.Empty<BookModel>().ToList();
 
@@ -165,11 +166,11 @@ namespace BookEditor.Data.Repositories
 			var pubHouses = PubHouses.Get().Where(t => pubHouseIds.Contains(t.PubHouseId));
 
 			var bookIds = books.Select(t => t.BookId);
-		 
+
 			var authors = BookAuthors.Get().Where(t => bookIds.Contains(t.BookId)).Join(Authors.Get(),
 				ba => ba.AuthorId,
 				a => a.AuthorId,
-				( ba, a) =>
+				(ba, a) =>
 				new
 				{
 					ba.BookId,
@@ -179,27 +180,27 @@ namespace BookEditor.Data.Repositories
 			var list = new List<BookModel>();
 			books.ForEach(t =>
 			{
-				var thisBookAuthors = authors.Where(a => a.BookId == t.BookId).Select(q=> q.author).ToList();
+				var thisBookAuthors = authors.Where(a => a.BookId == t.BookId).Select(q => q.author).ToList();
 				var pubHouse = pubHouses.Single(p => p.PubHouseId == t.PubHouseId);
 				list.Add(new BookModel(t, thisBookAuthors, pubHouse));
-				
+
 			});
 			return list;
 		}
 
-		public List<Author> GetAuthors()
+		public IEnumerable<Author> GetAuthors()
 		{
 			return Authors.Get();
 		}
 
-		public List<PubHouse> GetPubHouses()
+		public IEnumerable<PubHouse> GetPubHouses()
 		{
 			return PubHouses.Get();
 		}
 
 		public BookModel GetBook(long id)
 		{
-			var book = Books.Get(id);
+			var book = Books.GetById(id);
 			var pubHouse = PubHouses.Get().Single(t => t.PubHouseId == book.PubHouseId);
 			var authors = Authors.Get()
 				.Join(BookAuthors.Get().Where(q => q.BookId == book.BookId), a => a.AuthorId, ba => ba.AuthorId, (a, ba) =>
@@ -211,18 +212,19 @@ namespace BookEditor.Data.Repositories
 		public void EditBook(BookModel book)
 		{
 			BookAuthors.DeleteBookAuthors(book.BookId);
-			book.Authors.ForEach(t=>
-				BookAuthors.Add(new BookAuthors { BookId = book.BookId, AuthorId = t}));
+			book.Authors.ForEach(t =>
+				BookAuthors.Add(new BookAuthors { BookId = book.BookId, AuthorId = t }));
 
-			Books.Update(new Book {
+			Books.Update(new Book
+			{
 				BookId = book.BookId,
 				PubHouseId = book.PubHouseId,
 				PublishYear = book.PublishYear,
 				NumPages = book.NumPages,
 				ISBN = book.ISBN,
-			//	Illustration = book.Illustration,
+				//	Illustration = book.Illustration,
 				Title = book.Title
-			}); 
+			});
 		}
 
 		public void EditAuthor(AuthorModel author)
@@ -242,12 +244,12 @@ namespace BookEditor.Data.Repositories
 				Title = book.Title
 			});
 			book.Authors.ForEach(t =>
-				BookAuthors.Add(new BookAuthors { BookId = id, AuthorId = t }));		 
+				BookAuthors.Add(new BookAuthors { BookId = id, AuthorId = t }));
 		}
 
 		public void DeleteAuthor(long id)
 		{
-			if(BookAuthors.Get().Any(t=> t.AuthorId== id))
+			if (BookAuthors.Get().Any(t => t.AuthorId == id))
 				throw new InvalidOperationException();
 			Authors.Delete(id);
 		}

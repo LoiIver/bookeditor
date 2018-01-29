@@ -1,4 +1,4 @@
-﻿namespace BookEditor.Data.Models
+﻿namespace BookEditor.Data.DataModels
 {
 	public sealed class Author
 

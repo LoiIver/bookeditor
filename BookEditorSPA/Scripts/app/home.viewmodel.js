@@ -120,7 +120,7 @@ function HomeViewModel(app, dataModel) {
 	}
 
 	self.addBook = function () {
-		self.selectedBook(new Book({ title: "Новая книга" }));
+		self.selectedBook(new Book({ title: "Новая книга", numPages: 1, publisYear: (new Date()).getFullYear(), pubHouseId : null }));
 	}
 
 	self.uploadImg = function (item) {
@@ -143,21 +143,27 @@ function HomeViewModel(app, dataModel) {
 	}
 	
 	self.saveBook = function (book) {
-		var method = 'PUT';
+		if ($("form input:invalid").length > 0) {
+			alert("Сохранение нвеозможно, исправьте, пожалуйста, ошибки");
+			return;
+		}
+		var method = "PUT";
 		if (!book.bookId())
-			method = 'POST';
+			method = "POST";
 
 		$.ajax({
 			url: app.dataModel.booksUrl,
 			type: method,
 			data: ko.toJSON(book),
 			contentType: "application/json;charset=utf-8",
-			success: function (data) {
+			success: function (message) {
+				alert(message);
 				self.getBooks();
 				self.selectedBook(null);
 			},
-			error: function (x, y, z) {
-				alert(x + '\n' + y + '\n' + z); //Att
+			error: function (data) {
+				var message = JSON.parse(data.responseText).message;
+				alert(message);
 			}
 		});
 	};
@@ -179,16 +185,17 @@ function HomeViewModel(app, dataModel) {
 
 	
 	self.removeBook = function (book) {
-		if (confirm()) {
+		if (confirm("Вы действительно хотите удалить книгу \""+ book.title()+"\"?")) {
 			$.ajax({
 				url: app.dataModel.booksUrl + "/" + book.bookId(),
-				type: "DELETE",
-				//contentType: "application/json;charset=utf-8",
-				success: function () {
+				type: "DELETE",				
+				success: function (message) {
+					alert(message);
 					self.getBooks();
 				},
-				error: function () {
-					alert('Удаление книги "' + book.title + '" невозможно');
+				error: function (data) {
+					var message = JSON.parse(data.responseText).message;
+					alert(message);
 				}
 			});
 		}

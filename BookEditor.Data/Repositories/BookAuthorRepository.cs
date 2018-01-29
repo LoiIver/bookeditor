@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BookEditor.Data.Contracts;
-using BookEditor.Data.Models;
+using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Repositories
 {
@@ -25,7 +25,7 @@ namespace BookEditor.Data.Repositories
 			_items.RemoveAll(t => t.BookId == bookId);
 		}
 
-		public List<BookAuthors>  Get()
+		public IEnumerable<BookAuthors>  Get()
 		{
 			return _items;
 		}
@@ -38,10 +38,9 @@ namespace BookEditor.Data.Repositories
 			return id;
 		}
 
-		public BookAuthors Get(long id)
+		public BookAuthors GetById(long id)
 		{
 			return _items.Single(t => t.BookAuthorId == id);
 		}
-
 	}
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,47 +19,79 @@ namespace BookEditorSPA.Controllers
 		}
 		public IHttpActionResult GetBooks()
 		{
-	 
-			//Att Task  await
-			var books =   _dataContext.GetBooks();
-			if (books == null || !books.Any())
-				return NotFound();
-			return Ok(books);
+			try
+			{
+				var books = _dataContext.GetBooks()?.ToList();
+				if (books == null || !books.Any())
+					return NotFound();
+				return Ok(books);
+			}
+			catch
+			{
+				return BadRequest("Невозможно отобразить информацию о книгах");
+			}
 		}
 
 		public IHttpActionResult Get(long id)
 		{
-			var book =
-				_dataContext.GetBook(id);
-			//Att Task  await
-			if (book == null)
-				return NotFound();
-			return Ok(book);
+			try
+			{
+				var book = _dataContext.GetBook(id);
+				return Ok(book);
+			}
+			catch
+			{
+				return BadRequest("Невозможно отобразить информацию о книге");
+			}
+
 		}
 
-		[HttpDelete]
+
 		public IHttpActionResult Delete(long id)
 		{
-			_dataContext.DeleteBook(id);
-			return Ok();
+			try
+			{
+				_dataContext.DeleteBook(id);
+				return Ok("Книга удалена успешно");
+			}
+			catch
+			{
+				return BadRequest("Невозможно удалить книгу");
+			}
 		}
-	 
+
+		[ValidateModel]
 		public IHttpActionResult Put(BookModel book)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
+			try
+			{
+				if (!ModelState.IsValid)
+					return BadRequest(ModelState);
 
-			_dataContext.EditBook(book);
-			return Ok();
+				_dataContext.EditBook(book);
+				return Ok("Информация обновлена успешно");
+			}
+			catch
+			{
+				return BadRequest($"Невозможно отредактировать информацио о книге \"{book.Title}\"");
+			}
 		}
-		
+
+		[ValidateModel]
 		public IHttpActionResult Post(BookModel book)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(ModelState);
+			try
+			{
+				if (!ModelState.IsValid)
+					return BadRequest(ModelState);
 
-			_dataContext.AddBook(book);
-			return Ok();
+				_dataContext.AddBook(book);
+				return Ok($"Информация о книге \"{book.Title}\" добавлена");
+			}
+			catch
+			{
+				return BadRequest($"Невозможно добавить информацио о книге {book.Title}");
+			}
 		}
 
 		[Route("api/books/upload")]
@@ -108,7 +138,7 @@ namespace BookEditorSPA.Controllers
 				//			photo = reader.ReadBytes((int)stream.Length);
 				//		}
 				//	}
-					return Request.CreateResponse(HttpStatusCode.OK);
+				return Request.CreateResponse(HttpStatusCode.OK);
 			}
 			catch (System.Exception e)
 			{

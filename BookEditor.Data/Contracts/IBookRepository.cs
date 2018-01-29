@@ -1,4 +1,4 @@
-﻿using BookEditor.Data.Models;
+﻿using BookEditor.Data.DataModels;
 
 namespace BookEditor.Data.Contracts
 {
