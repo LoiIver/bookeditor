@@ -181,7 +181,7 @@ namespace BookEditor.Data.Repositories
 			books.ForEach(t =>
 			{
 				var thisBookAuthors = authors.Where(a => a.BookId == t.BookId).Select(q => q.author).ToList();
-				var pubHouse = pubHouses.Single(p => p.PubHouseId == t.PubHouseId);
+				var pubHouse = pubHouses.SingleOrDefault(p => p.PubHouseId == t.PubHouseId);
 				list.Add(new BookModel(t, thisBookAuthors, pubHouse));
 
 			});
@@ -201,7 +201,9 @@ namespace BookEditor.Data.Repositories
 		public BookModel GetBook(long id)
 		{
 			var book = Books.GetById(id);
-			var pubHouse = PubHouses.Get().Single(t => t.PubHouseId == book.PubHouseId);
+
+			var pubHouse = book.PubHouseId.HasValue ? PubHouses.GetById(book.PubHouseId.Value) : null;
+			
 			var authors = Authors.Get()
 				.Join(BookAuthors.Get().Where(q => q.BookId == book.BookId), a => a.AuthorId, ba => ba.AuthorId, (a, ba) =>
 					a).ToList();

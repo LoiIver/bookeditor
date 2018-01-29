@@ -23,8 +23,9 @@ namespace BookEditorSPA
 				"~/Scripts/knockout.validation.js"));
 
 			bundles.Add(new ScriptBundle("~/bundles/libs").Include(
-				"~/Scripts/app/selecrPicker.js",
-				"~/Scripts/app/toastr.min.js"));
+				"~/Scripts/selecrPicker.js",
+				"~/Scripts/i18n/defaults-ru_RU.min.js",
+				"~/Scripts/toastr.min.js"));
 
 
 			bundles.Add(new ScriptBundle("~/bundles/app").Include(

@@ -40,10 +40,6 @@ function HomeViewModel(app, dataModel) {
 	self.byPublishYearSorted = ko.observable();
 	self.ascendingSortOrder = ko.observable(true);
 
-
-	self.buyer = { name: 'Franklin', credits: 250 };
-	self.seller = { name: 'Mario', credits: 5800 };
-
 	var saveToStore = function (sortedByName, sortedByPublishYear, ascendingSortOrder) {
 		localStorage.setItem("sortedByName", sortedByName);
 		localStorage.setItem("sortedByPublishYear", sortedByPublishYear);
@@ -98,6 +94,7 @@ function HomeViewModel(app, dataModel) {
 				if (!!data.pubHouses) {
 					var pubHouses = $.map(data.pubHouses, function (item) { return new PubHouse(item) });
 					self.pubHouses(pubHouses);
+					self.pubHouses.push(new PubHouse({ pubHouseId: null, name: '' }));
 				}
 			}
 		);
@@ -120,7 +117,7 @@ function HomeViewModel(app, dataModel) {
 	}
 
 	self.addBook = function () {
-		self.selectedBook(new Book({ title: "Новая книга", numPages: 1, publisYear: (new Date()).getFullYear(), pubHouseId : null }));
+		self.selectedBook(new Book({ title: "Новая книга", numPages: 1, publishYear: (new Date()).getFullYear() }));
 	}
 
 	self.uploadImg = function (item) {
@@ -161,9 +158,16 @@ function HomeViewModel(app, dataModel) {
 				self.getBooks();
 				self.selectedBook(null);
 			},
-			error: function (data) {
-				var message = JSON.parse(data.responseText).message;
-				alert(message);
+			error: function (data) {				
+				if (data.status === 400) {
+					var res = JSON.parse(data.responseText);
+
+					if (!res || !res.modelState) {
+						// default messages/actions here
+					}
+					var message = JSON.parse(data.responseText).message;
+					alert(message);
+				}
 			}
 		});
 	};

@@ -15,7 +15,7 @@ namespace BookEditor.Data.Models
 		[Required]
 		[Range(1, 10000)]
 		public int NumPages { get; set; }
-		public long PubHouseId { get; set; }
+		public long? PubHouseId { get; set; }
 		[StringLength(30)]
 		public string PubHouseName { get; set; }
 		[Range(1800, int.MaxValue)]
@@ -45,7 +45,7 @@ namespace BookEditor.Data.Models
 				? $"data:image/png;base64; {Convert.ToBase64String(book.Illustration)}"
 				: "";
 			PubHouseId = book.PubHouseId;
-			PubHouseName = pubHouse.Name;
+			PubHouseName = pubHouse?.Name;
 			Authors = thisBookAuthors.Select(q => q.AuthorId).ToList();
 			AuthorsNames = string.Join("; ", thisBookAuthors.Select(aa => $"{aa.LastName} {aa.FirstName}"));
 		}
@@ -69,7 +69,7 @@ namespace BookEditor.Data.Models
 		private bool CheckISBN()
 		{
 			if (string.IsNullOrWhiteSpace(ISBN))
-				return false;
+				return true;
 
 			var pure = ISBN.Replace("-", "");
 			try
